@@ -1,0 +1,31 @@
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/bglift"
+        android:orientation="vertical"
+        android:padding="5dp" >
+
+        <EditText
+            android:id="@+id/etSignName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <requestFocus />
+        </EditText>
+        
+		<com.android.drawing.ImageDrawer
+		    android:id="@+id/iVSign"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_marginBottom="5dp"
+		    android:scaleType="matrix" />
+
+		<Button
+		    android:id="@+id/bValSig"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:text="@string/bValSig" />
+		
+    </LinearLayout>

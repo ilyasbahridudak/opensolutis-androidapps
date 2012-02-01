@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bglift3"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tvTitle"
+        style="@style/LabelTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title" />
+
+    <Button
+        android:id="@+id/bIncidents"
+        style="@style/ButtonText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/btn_red"
+        android:drawableRight="@drawable/incidents"
+        android:text="@string/incidents" />
+	
+	<Button
+        android:id="@+id/bMaintenances"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/maintenance"
+        android:drawableRight="@drawable/maintenance"
+        android:background="@drawable/btn_yellow"
+        style="@style/ButtonText" />
+	
+    <Button
+        android:id="@+id/bCheckList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/bCheckList"
+        android:drawableRight="@drawable/checklist"
+        android:background="@drawable/btn_green"
+        style="@style/ButtonText" />
+
+	<LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+        </LinearLayout>
+		
+	<TextView
+            android:id="@+id/tvAllRights"
+            style="@style/allRightsLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/allrigths" />
+		
+</LinearLayout>
