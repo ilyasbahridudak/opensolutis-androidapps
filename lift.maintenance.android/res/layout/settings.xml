@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/layConfig"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bglift"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tvSettings"
+            style="@style/LabelTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings" />
+        
+        <ScrollView
+		    android:id="@+id/scrollView1"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content" >
+
+		    <LinearLayout
+		        android:id="@+id/linearLayout1"
+		        android:layout_width="match_parent"
+		        android:layout_height="match_parent"
+		        android:orientation="vertical" >
+		        
+		        <LinearLayout
+		            android:id="@+id/layLogin"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content" >
+		
+		            <TextView
+		                android:id="@+id/tvLogin"
+		                android:layout_width="80dp"
+		                android:layout_height="wrap_content"
+		                android:gravity="right"
+		                android:text="@string/login"
+		                android:textColor="#ffffff" />
+		
+		            <EditText
+		                android:id="@+id/etLogin"
+		                android:layout_width="match_parent"
+		                android:layout_height="wrap_content"
+		                android:layout_weight="1" >
+		
+		                <requestFocus />
+		            </EditText>
+		        </LinearLayout>
+		
+		        <LinearLayout
+		            android:id="@+id/layPass"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content" >
+		
+		            <TextView
+		                android:id="@+id/tvPass"
+		                android:layout_width="80dp"
+		                android:layout_height="wrap_content"
+		                android:gravity="right"
+		                android:text="@string/password"
+		                android:textColor="#ffffff" />
+		
+		            <EditText
+		                android:id="@+id/etPass"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_weight="1"
+		                android:inputType="textPassword" />
+		        </LinearLayout>
+
+		        <LinearLayout
+		            android:id="@+id/layURL"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content" >
+		
+		            <TextView
+		                android:id="@+id/tvURL"
+		                android:layout_width="80dp"
+		                android:layout_height="wrap_content"
+		                android:gravity="right"
+		                android:text="@string/url"
+		                android:textColor="#ffffff" />
+		
+		            <EditText
+		                android:id="@+id/etURL"
+		                android:layout_width="match_parent"
+		                android:layout_height="wrap_content"
+		                android:layout_weight="1" />
+		        </LinearLayout>
+
+		        <LinearLayout
+		            android:id="@+id/layBase"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content" >
+		
+		            <TextView
+		                android:id="@+id/tvBase"
+		                android:layout_width="80dp"
+		                android:layout_height="wrap_content"
+		                android:gravity="right"
+		                android:text="@string/database"
+		                android:textColor="#ffffff" />
+		
+		            <EditText
+		                android:id="@+id/etBase"
+		                android:layout_width="match_parent"
+		                android:layout_height="wrap_content"
+		                android:layout_weight="1" />
+		        </LinearLayout>
+
+		        <LinearLayout
+		            android:id="@+id/layFreq"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content" >
+		
+		            <TextView
+		                android:id="@+id/tvFreq"
+		                android:layout_width="80dp"
+		                android:layout_height="wrap_content"
+		                android:gravity="right"
+		                android:text="@string/frequency"
+		                android:textColor="#ffffff" />
+		
+		            <EditText
+		                android:id="@+id/etFreq"
+		                android:layout_width="match_parent"
+		                android:layout_height="wrap_content"
+		                android:layout_weight="1"
+		                android:hint="@string/freqHelp"
+		                android:inputType="number" />
+		        </LinearLayout>
+
+		        <Button
+		            android:id="@+id/bValidSettings"
+		            style="@style/ButtonText"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_margin="5dp"
+		            android:background="@drawable/btn_purple"
+		            android:drawableRight="@drawable/check"
+		            android:text="@string/validate" />
+		    </LinearLayout>
+		</ScrollView>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvAllRights"
+            style="@style/allRightsLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/allrigths" />
+		
+    </LinearLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+	<item android:id="@+id/itSettings"
+		  android:orderInCategory="2"
+		  android:title="@string/settings"
+		  android:icon="@drawable/settings" 
+		  android:layout_width="wrap_content"/>
+	
+	<item android:id="@+id/itSync"
+		  android:orderInCategory="4"
+		  android:title="@string/sync"
+		  android:icon="@drawable/sync" />
+		
+</menu>

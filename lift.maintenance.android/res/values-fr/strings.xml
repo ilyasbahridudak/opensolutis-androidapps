@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title">Lift Maintenance</string>
+    <string name="app_name">Lift Maintenance</string>
+    <string name="bCheckList">Liste de vérification</string>
+    <string name="incidents">Pannes</string>
+    <string name="maintenance">Entretien</string>
+    <string name="settings">Parametres</string>
+    <string name="sync">Synchroniser</string>
+    <string name="login">Identifiant :</string>
+    <string name="password">Mot de passe :</string>
+    <string name="url">URL :</string>
+    <string name="database">Base de données :</string>
+    <string name="frequency">Frequence :</string>
+    <string name="validate">Valider</string>
+    <string name="freqHelp">Synchroniser en minutes</string>
+    <string name="title_refused">Non Connecté !!</string>
+    <string name="msg_refused">Mauvais nom d\'utilisateur ou Mot de passe pour cette base de donnée</string>
+    <string name="title_badurl">Non Connecté !!!</string>
+    <string name="msg_badurl">Mauvais URL ou nom de base de donnée.</string>
+    <string name="title_error">Erreur</string>
+    <string name="msg_error">Unable to connect on Server</string>
+    <string name="positiveButton">Ok</string>
+    <string name="no_value_error">Veuillez vérifier la valeur de ce champ dans OpenERP</string>
+    <string name="callDateLabel">Date de la demande :</string>
+    <string name="bToExecute">Executer</string>
+    <string name="bToWait">Attente</string>
+    <string name="bToStop">Arrêt</string>
+    <string name="bToBeDone">Terminé</string>
+    <string name="cbCable">Cable</string>
+    <string name="cbParachute">Parachute</string>
+    <string name="bValSig">Valider</string>
+    <string name="deadlineDate">Date limite : </string>
+    <string name="draft">Brouillon</string>
+    <string name="considering">Pris en compte</string>
+    <string name="waiting">En Attente</string>
+    <string name="progress">En cours</string>
+    <string name="done">Terminé</string>
+    <string name="stop">A l\'arrêt</string>
+    <string name="SelectChapter">Selectionner un châpitre</string>
+    <string name="SelectLocalization">Selectionner une localisation</string>
+    <string name="SelectCause">Sellectionner une Cause</string>
+    <string name="UnknownContact">Contact non communiqué</string>
+    <string name="Call">Appeler</string>
+    <string name="bToRestart">Redémarer</string>
+    <string name="StartService">Le services est démaré</string>
+    <string name="BeginSync">Début de synchro</string>
+    <string name="SyncOf"       >Synchro de     |\tSup\t|\tIns\t|\tMaj\t|\n</string>
+    <string name="SyncCheckList">Liste de Vérif |\t%1$d\t|\t%2$d\t|\t%3$d\t|\n</string>
+	<string name="SyncCheckLine">Ligne de Vérif |\t%1$d\t|\t%2$d\t|\t%3$d\t|\n</string>
+	<string name="SyncCodif"    >Codifications  |\t%1$d\t|\t%2$d\t|\t%3$d\t|\n</string>
+	<string name="SyncMachine"  >Appareils      |\t%1$d\t|\t%2$d\t|\t%3$d\t|\n</string>
+	<string name="SyncInterv"   >Interventions  |\t%1$d\t|\t%2$d\t|\t%3$d\t|\n</string>
+</resources>
