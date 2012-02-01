@@ -30,7 +30,11 @@ public class Synchro {
 		if (connected == 0){
 			Timestamp last;
 			try{
-				last = new Timestamp(prefs.getLong("last", 0));
+				long lDate = prefs.getLong("last", 0);
+				if(lDate != 0)
+					last = new Timestamp(lDate);
+				else 
+					last = null;
 			}
 			catch(ClassCastException e){
 				last = null;
@@ -38,7 +42,7 @@ public class Synchro {
 			Timestamp today = new Timestamp(new Date().getTime());
 			manager.open();
 			
-			if(last == null || last.getDate() != today.getDate()){
+			if(last == null || (last.getDate() != today.getDate() || last.getMonth() != today.getMonth())){
 				modifs = synchroCheckList(access, manager, modifs);
 				modifs = synchroCodification(access, manager, modifs);
 				SharedPreferences.Editor editor=prefs.edit();
