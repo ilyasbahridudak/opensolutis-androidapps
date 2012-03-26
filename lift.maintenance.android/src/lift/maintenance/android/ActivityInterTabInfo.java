@@ -202,6 +202,9 @@ public class ActivityInterTabInfo extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		switch(v.getId()){
 		case R.id.bToExecute:
+			if(intervention.getState().equals(res.getResourceEntryName(R.string.stop))){
+				machine.setBreakdownStop(false);
+			}
 			intervention.setState(res.getResourceEntryName(R.string.progress));
 			if(intervention.getInterventionStart() == null)
 			{
@@ -213,6 +216,7 @@ public class ActivityInterTabInfo extends Activity implements OnClickListener{
 			break;
 		case R.id.bToStop:
 			intervention.setState(res.getResourceEntryName(R.string.stop));
+			machine.setBreakdownStop(true);
 			break;
 		case R.id.bToBeDone:
 			intervention.setState(res.getResourceEntryName(R.string.done));

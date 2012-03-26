@@ -361,8 +361,13 @@ public class Synchro {
 					
 					Timestamp[] mnts = getMaintenances(machine.getBaseId(), access);
 					
-					machine.setLastInter(mnts[0]);
-					machine.setNextInter(mnts[1]);
+					if(mnts[0]!=null)
+						machine.setLastInter(mnts[0]);
+					
+					if(mnts[1]!=null)
+						machine.setNextInter(mnts[1]);
+					
+					machine.setBreakdownStop((Boolean)value.get(MachineModel.listFields[13]));
 					
 					manager.machine.insert(machine);
 					modifs.put(11, modifs.get(11)+1);
@@ -407,7 +412,7 @@ public class Synchro {
 					Timestamp[] mnts = getMaintenances(machine.getBaseId(), access);
 					
 					//vérification de la valeur des champs pour ne mettre à jour que les valeurs qui ont changé
-					if(!!machine.getName().equals(value.get(MachineModel.listFields[2])) ||
+					if(!machine.getName().equals(value.get(MachineModel.listFields[2])) ||
 							machine.getContactName().equals(((Object[])value.get(MachineModel.listFields[3]))[1]) ||
 							!machine.getMachineAddress().equals(((Object[])value.get(MachineModel.listFields[4]))[1]) ||
 							!machine.getCaretakerAddress().equals(((Object[])value.get(MachineModel.listFields[5]))[1]) ||
@@ -416,7 +421,7 @@ public class Synchro {
 							machine.getGenre() != (String)value.get(MachineModel.listFields[8]) ||
 							!machine.getZip().equals(zip) || !machine.getCity().equals(city) || 
 							(machine.getLastInter()!=null && mnts[0]!=null && !machine.getLastInter().equals(mnts[0])) ||
-							(machine.getNextInter()!=null && mnts[1]!=null && !machine.getLastInter().equals(mnts[1]))){
+							(machine.getNextInter()!=null && mnts[1]!=null && !machine.getLastInter().equals(mnts[1])) ){
 						
 						//mise à jour des valeurs
 						machine.setName((String)value.get(MachineModel.listFields[2]));
@@ -428,10 +433,21 @@ public class Synchro {
 						machine.setGenre((String)value.get(MachineModel.listFields[8]));
 						machine.setZip(zip);
 						machine.setCity(city);
-						machine.setLastInter(mnts[0]);
-						machine.setNextInter(mnts[1]);
+						if(mnts[0]!=null)
+							machine.setLastInter(mnts[0]);
+						if(mnts[1]!=null)
+							machine.setNextInter(mnts[1]);
 						manager.machine.update(machine.getBaseId(), machine);
 						modifs.put(12, modifs.get(12)+1);
+					}
+					
+					if(!machine.getBreakdownStop().equals(value.get(MachineModel.listFields[13]))){
+						HashMap<String, Object> newValue = new HashMap<String, Object>();
+						
+						newValue.put(MachineModel.listFields[13], machine.getBreakdownStop());
+						
+						@SuppressWarnings("unused")
+						Object res = access.Write(MachineModel.modelName, machine.getBaseId(), newValue); 
 					}
 				}
 			}

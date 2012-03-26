@@ -35,6 +35,7 @@ public class MachineManager extends TableManager {
 			machine.setCity(c.getString(10));
 			machine.setLastInter(TableModel.stringToDate(c.getString(11), true));
 			machine.setNextInter(TableModel.stringToDate(c.getString(12), true));
+			machine.setBreakdownStop(Boolean.valueOf(c.getString(13)));
 			machines.add(machine);
 			c.moveToNext();
 		}

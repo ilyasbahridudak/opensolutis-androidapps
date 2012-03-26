@@ -17,11 +17,12 @@ public class MachineModel extends TableModel {
 	String city;
 	private Timestamp last_inter;
 	private Timestamp next_inter;
+	Boolean breakdown_stop;
 	
 	public static final String modelName = "contract.machine";
 	public static final String tableName = modelName.replace(".", "_");
 	public static final String[] listFields = TableModel.MakeFields(new String[] {"contract_id", "machine_address_id", "caretaker_address_id", "check_list_id",
-			"area_id", "genre", "zip", "city", "last_inter", "next_inter"});
+			"area_id", "genre", "zip", "city", "last_inter", "next_inter", "breakdown_stop"});
 	
 	public MachineModel(){
 		super.modelName = MachineModel.modelName;
@@ -29,7 +30,7 @@ public class MachineModel extends TableModel {
     	super.listFields = MachineModel.listFields;
 	}
 	public MachineModel(int base_id, String contract_name, String machine_address, String caretaker_address, int check_list_id, String name,
-			String area_id, String genre, String zip, String city, Timestamp last_inter, Timestamp next_inter){
+			String area_id, String genre, String zip, String city, Timestamp last_inter, Timestamp next_inter, Boolean breakdown_stop){
 		super.modelName = MachineModel.modelName;
     	super.tableName = MachineModel.tableName;
     	super.listFields = MachineModel.listFields;
@@ -45,6 +46,7 @@ public class MachineModel extends TableModel {
 		this.city = city;
 		this.last_inter = last_inter;
 		this.next_inter = next_inter;
+		this.breakdown_stop = breakdown_stop;
 	}
 	
 	public String getContactName(){
@@ -77,6 +79,9 @@ public class MachineModel extends TableModel {
     public Timestamp getNextInter(){
     	return next_inter;
     }
+    public Boolean getBreakdownStop(){
+    	return breakdown_stop;
+    }
     
 	public void setContractName(String contract_name){
 		this.contract_name = contract_name;
@@ -108,7 +113,10 @@ public class MachineModel extends TableModel {
 	public void setNextInter(Timestamp next_inter){
 		this.next_inter = next_inter;
 	}
-
+	public void setBreakdownStop(Boolean breakdown_stop){
+		this.breakdown_stop = breakdown_stop;
+	}
+	
 	@Override
 	public List<Object> toArray() {
 		List<Object> list = super.toArrayBase();
@@ -122,6 +130,7 @@ public class MachineModel extends TableModel {
 		list.add(city);
 		list.add(last_inter);
 		list.add(next_inter);
+		list.add(breakdown_stop);
 		return list;
 	}
 }
