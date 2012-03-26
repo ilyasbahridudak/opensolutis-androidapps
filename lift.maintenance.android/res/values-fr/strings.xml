@@ -53,4 +53,26 @@
 	<string name="SyncMachine"  >Appareils      |\t%1$d\t|\t%2$d\t|\t%3$d\t|\n</string>
 	<string name="SyncInterv"   >Interventions  |\t%1$d\t|\t%2$d\t|\t%3$d\t|\n</string>
 	<string name="allready_sync">Synchronisation déjà en cours</string>
+	<string name="labSector">Secteur :</string>
+	<string name="labDept">Département :</string>
+	<string name="labCity">Ville :</string>
+	<string name="labMachineAddress">Adresse :</string>
+	<string name="labMachineName">Nom :</string>
+	<string name="first">er</string>
+	<string name="second">éme</string>
+	<string name="third">éme</string>
+	<string name="authers">éme</string>
+	<string name="labInfos">Informations :</string>
+	<string name="labIndex">Index :</string>
+	<string name="labContract">Contrat N° :</string>
+	<string name="labType">Type de Machine :</string>
+	<string name="L">Ascenseur</string>
+    <string name="H">Monte charge</string>
+    <string name="CL">Monte voiture</string>
+    <string name="DL">Ascenseur Handicapé</string>
+    <string name="P">Plate-forme</string>
+    <string name="BP">Barrier/portal</string>
+    <string name="O">Autres</string>
+    <string name="labLast">Dérniére Visite</string>
+    <string name="labNext">Prochaine Visite</string>
 </resources>
