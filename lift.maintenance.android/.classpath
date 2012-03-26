@@ -4,9 +4,9 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="C:/Users/admin/workspace/opensolutis-androidapps/jars/android-xmlrpc.jar"/>
-	<classpathentry kind="lib" path="C:/Users/admin/workspace/opensolutis-androidapps/jars/com.android.drawing.jar"/>
-	<classpathentry kind="lib" path="C:/Users/admin/workspace/opensolutis-androidapps/jars/com.sqlite.management.jar"/>
-	<classpathentry kind="lib" path="C:/Users/admin/workspace/opensolutis-androidapps/jars/com.xmlrpc.access.jar"/>
+	<classpathentry kind="lib" path="C:/And-dev/Workspace/opensolutis-androidapps/jars/android-xmlrpc.jar"/>
+	<classpathentry kind="lib" path="C:/And-dev/Workspace/opensolutis-androidapps/jars/com.android.drawing.jar"/>
+	<classpathentry kind="lib" path="C:/And-dev/Workspace/opensolutis-androidapps/jars/com.sqlite.management.jar"/>
+	<classpathentry kind="lib" path="C:/And-dev/Workspace/opensolutis-androidapps/jars/com.xmlrpc.access.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

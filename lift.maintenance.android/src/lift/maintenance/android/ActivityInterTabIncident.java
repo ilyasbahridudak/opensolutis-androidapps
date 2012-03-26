@@ -109,7 +109,6 @@ public class ActivityInterTabIncident extends Activity implements OnClickListene
 		tvContact.setText(Contact);
 	}
 
-	@Override
 	public void onClick(View v) {
 		switch(v.getId()){
 		case R.id.bCall:
@@ -119,7 +118,6 @@ public class ActivityInterTabIncident extends Activity implements OnClickListene
 		}
 	}
 
-	@Override
 	public void onItemSelected(AdapterView<?> parent, View view,
 			int position, long id) {
 		if(!isResume){
@@ -145,7 +143,6 @@ public class ActivityInterTabIncident extends Activity implements OnClickListene
 		}
 	}
 	
-	@Override
 	public void onNothingSelected(AdapterView<?> parent) { }
 	
 	private void selectedChapter(CodificationModel item) {

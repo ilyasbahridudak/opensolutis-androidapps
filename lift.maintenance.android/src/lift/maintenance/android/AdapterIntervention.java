@@ -25,17 +25,14 @@ public class AdapterIntervention extends BaseAdapter {
 		res = context.getResources();
 	}
 	
-	@Override
 	public int getCount() {
 		return lst.size();
 	}
 
-	@Override
 	public Object getItem(int position) {
 		return lst.get(position);
 	}
 
-	@Override
 	public long getItemId(int position) {
 		return position;
 	}
@@ -47,7 +44,6 @@ public class AdapterIntervention extends BaseAdapter {
 		TextView tvState;
 	}
 	
-	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
 		

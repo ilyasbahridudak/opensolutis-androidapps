@@ -69,9 +69,14 @@ public class ServiceSync extends Service {
 					}
 					else{
 						isSync = true;
+						SharedPreferences.Editor editor=prefs.edit();
+						editor.putBoolean("can_sync", false);
+						editor.commit();
 						showMessage(getApplicationContext(), (String) getText(R.string.BeginSync));
 						showMessage(getApplicationContext(), Synchro.synchro(prefs, getApplicationContext(), manager));
 						next = freq *60;
+						editor.putBoolean("can_sync", true);
+						editor.commit();
 						isSync = false;
 					}
 				}

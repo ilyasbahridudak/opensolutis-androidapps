@@ -1,36 +1,52 @@
 package lift.maintenance.android.dal;
 
-public class MachineModel {
+import java.sql.Timestamp;
+import java.util.List;
+
+import com.sqlite.management.TableModel;
+
+public class MachineModel extends TableModel {
 	
-	int id;
-	int base_id;
 	String contract_name;
 	String machine_address;
 	String caretaker_address;
 	int check_list_id;
-	String name;
+	String area_id;
+	String genre;
+	String zip;
+	String city;
+	private Timestamp last_inter;
+	private Timestamp next_inter;
 	
 	public static final String modelName = "contract.machine";
 	public static final String tableName = modelName.replace(".", "_");
-	public static final String[] listFields = {"id", "base_id", "contract_id", "machine_address_id",
-												"caretaker_address_id", "check_list_id", "name"};
+	public static final String[] listFields = TableModel.MakeFields(new String[] {"contract_id", "machine_address_id", "caretaker_address_id", "check_list_id",
+			"area_id", "genre", "zip", "city", "last_inter", "next_inter"});
 	
-	public MachineModel(){}
-	public MachineModel(int base_id, String contract_name, String machine_address, String caretaker_address, int check_list_id, String name){
+	public MachineModel(){
+		super.modelName = MachineModel.modelName;
+    	super.tableName = MachineModel.tableName;
+    	super.listFields = MachineModel.listFields;
+	}
+	public MachineModel(int base_id, String contract_name, String machine_address, String caretaker_address, int check_list_id, String name,
+			String area_id, String genre, String zip, String city, Timestamp last_inter, Timestamp next_inter){
+		super.modelName = MachineModel.modelName;
+    	super.tableName = MachineModel.tableName;
+    	super.listFields = MachineModel.listFields;
 		this.base_id = base_id;
 		this.contract_name = contract_name;
 		this.machine_address = machine_address;
 		this.caretaker_address = caretaker_address;
 		this.check_list_id = check_list_id;
 		this.name = name;
+		this.area_id =  area_id;
+		this.genre = genre;
+		this.zip = zip;
+		this.city = city;
+		this.last_inter = last_inter;
+		this.next_inter = next_inter;
 	}
 	
-	public int getId(){
-		return id;
-	}
-	public int getBaseId(){
-		return base_id;
-	}
 	public String getContactName(){
 		return contract_name;
 	}
@@ -43,16 +59,25 @@ public class MachineModel {
 	public int getCheckListId(){
 		return check_list_id;
 	}
-	public String getName(){
-		return name;
+	public String getArea(){
+		return area_id;
 	}
-	
-	public void setId(int id){
-		this.id = id;
+	public String getGenre(){
+		return genre;
 	}
-	public void setBaseId(int base_id){
-		this.base_id = base_id;
+	public String getZip(){
+		return zip;
 	}
+	public String getCity(){
+		return city;
+	}
+	public Timestamp getLastInter(){
+    	return last_inter;
+    }
+    public Timestamp getNextInter(){
+    	return next_inter;
+    }
+    
 	public void setContractName(String contract_name){
 		this.contract_name = contract_name;
 	}
@@ -65,12 +90,38 @@ public class MachineModel {
 	public void setCheckListId(int check_list_id){
 		this.check_list_id = check_list_id;
 	}
-	public void setName(String name){
-		this.name = name;
+	public void setGenre(String genre){
+		this.genre = genre;
 	}
-	
-	public String toString(){
-		return "id: " + id + ", base_id: " + base_id + ", contract_name: " + contract_name + ", check_list_id: " + check_list_id 
-				+ ", name :" + name + ", machine_address: " + machine_address + ", caretaker_address: " + caretaker_address;
+	public void setArea(String area_id){
+		this.area_id = area_id;
+	}
+	public void setZip(String zip){
+		this.zip = zip;
+	}
+	public void setCity(String city){
+		this.city = city;
+	}
+	public void setLastInter(Timestamp last_inter){
+		this.last_inter = last_inter;
+	}
+	public void setNextInter(Timestamp next_inter){
+		this.next_inter = next_inter;
+	}
+
+	@Override
+	public List<Object> toArray() {
+		List<Object> list = super.toArrayBase();
+		list.add(contract_name);
+		list.add(machine_address);
+		list.add(caretaker_address);
+		list.add(check_list_id);
+		list.add(area_id);
+		list.add(genre);
+		list.add(zip);
+		list.add(city);
+		list.add(last_inter);
+		list.add(next_inter);
+		return list;
 	}
 }
