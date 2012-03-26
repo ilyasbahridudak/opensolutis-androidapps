@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bglift"
+    android:orientation="vertical" >
+
+    <LinearLayout android:id="@+id/lLCoord"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <LinearLayout android:id="@+id/llSector"
+        	android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            
+	        <TextView android:id="@+id/labSetcor"
+	            style="@style/interLabel"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:text="@string/labSector"/>
+
+	        <TextView android:id="@+id/tvSetcor"
+	            style="@style/interValue"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:text="0"
+        		android:gravity="center"/>
+	        
+        </LinearLayout>
+        
+        <LinearLayout android:id="@+id/LL_SEPARATOR1"
+	            android:layout_width="1dp"
+	            android:layout_height="match_parent"
+	            android:background="#ffffff" />
+        
+        <LinearLayout android:id="@+id/llDept"
+        	android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+	        
+	        <TextView android:id="@+id/labDept"
+	            style="@style/interLabel"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:text="@string/labDept"/>
+	        
+	        <TextView android:id="@+id/tvDept"
+	            style="@style/interValue"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:text="@string/labDept"
+        		android:gravity="center"/>
+	        
+	    </LinearLayout>
+        
+        <LinearLayout android:id="@+id/LL_SEPARATOR2"
+	            android:layout_width="1dp"
+	            android:layout_height="match_parent"
+	            android:background="#ffffff" />
+        
+        <LinearLayout android:id="@+id/llCity"
+        	android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+	        
+	        <TextView android:id="@+id/labCity"
+	            style="@style/interLabel"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:text="@string/labCity"/>
+	        
+	        <TextView android:id="@+id/tvCity"
+	            style="@style/interValue"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:text="City"
+        		android:gravity="center"/>
+
+	    </LinearLayout>
+	    
+    </LinearLayout>
+    
+    <LinearLayout android:id="@+id/LL_SEPARATOR3"
+	            android:layout_width="match_parent"
+	            android:layout_height="1dp"
+	            android:background="#ffffff" />
+    
+    <TextView
+        android:id="@+id/labMachineAdresse"
+        style="@style/interLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/labMachineAddress" />
+    
+    <TextView
+        android:id="@+id/tvMachineAdresse"
+        style="@style/interValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="Machine Address" />
+
+    <LinearLayout android:id="@+id/LL_SEPARATOR4"
+	            android:layout_width="match_parent"
+	            android:layout_height="1dp"
+	            android:background="#ffffff" />
+    
+    <LinearLayout android:id="@+id/lLRef"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+		
+        <LinearLayout android:id="@+id/llIndex"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            
+            <TextView android:id="@+id/labIndex"
+            	android:layout_width="match_parent"
+            	android:layout_height="wrap_content"
+            	style="@style/interLabel" 
+            	android:text="@string/labIndex"/>
+            
+            <TextView android:id="@+id/tvIndex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/interValue"
+                android:gravity="center" 
+                android:text="0"/>
+            "
+        </LinearLayout>
+        
+        <LinearLayout android:id="@+id/LL_SEPARATOR9"
+	            android:layout_width="1dp"
+	            android:layout_height="match_parent"
+	            android:background="#ffffff" />
+        
+        <LinearLayout android:id="@+id/llContract"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            
+            <TextView android:id="@+id/labContract"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/interLabel"
+                android:text="@string/labContract"/>
+            
+            <TextView  android:id="@+id/tvContract"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/interValue"
+                android:gravity="center"
+                android:text="0"/>
+            
+        </LinearLayout>
+        
+        <LinearLayout android:id="@+id/LL_SEPARATOR10"
+	            android:layout_width="1dp"
+	            android:layout_height="match_parent"
+	            android:background="#ffffff" />
+        
+        <LinearLayout android:id="@+id/llType"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            
+            <TextView android:id="@+id/labType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/interLabel"
+                android:text="@string/labType"/>
+            
+            <TextView android:id="@+id/tvType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/interValue"
+                android:gravity="center"
+                android:text="Type"/>
+            
+        </LinearLayout>
+        
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/LL_SEPARATOR5"
+	            android:layout_width="match_parent"
+	            android:layout_height="1dp"
+	            android:background="#ffffff" />
+    
+    <TextView
+        android:id="@+id/tvDateLabel"
+        style="@style/interLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/callDateLabel" />
+
+    <TextView
+        android:id="@+id/tvDate"
+        style="@style/interValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="date" />
+    
+    <LinearLayout android:id="@+id/LL_SEPARATOR6"
+	            android:layout_width="match_parent"
+	            android:layout_height="1dp"
+	            android:background="#ffffff" />
+    
+    <TextView
+        android:id="@+id/labInfo"
+        style="@style/interLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/labInfos" />
+    
+    <TextView
+        android:id="@+id/tvInfo"
+        style="@style/interValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="Infos" />
+
+    <LinearLayout android:id="@+id/LL_SEPARATOR7"
+	            android:layout_width="match_parent"
+	            android:layout_height="1dp"
+	            android:background="#ffffff" />
+    
+    <LinearLayout
+        android:id="@+id/cp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <CheckBox
+            android:id="@+id/cbCable"
+            style="@style/interValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cbCable" />
+
+        <CheckBox
+            android:id="@+id/cbParachute"
+            style="@style/interValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cbParachute" />
+	</LinearLayout>
+
+    <LinearLayout android:id="@+id/LL_SEPARATOR8"
+	            android:layout_width="match_parent"
+	            android:layout_height="1dp"
+	            android:background="#ffffff" />
+    
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/bToExecute"
+            style="@style/ButtonText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_purple"
+            android:text="@string/bToExecute" />
+
+        <Button
+            android:id="@+id/bToWait"
+            style="@style/ButtonText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_yellow"
+            android:text="@string/bToWait" />
+
+        <Button
+            android:id="@+id/bToStop"
+            style="@style/ButtonText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_red"
+            android:text="@string/bToStop" />
+
+        <Button
+            android:id="@+id/bToBeDone"
+            style="@style/ButtonText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_green"
+            android:text="@string/bToBeDone" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvState"
+        style="@style/interValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="state"
+        android:textColor="#ffffff" />
+
+    <LinearLayout
+        android:id="@+id/LinearLayout01"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvAllRights"
+        style="@style/allRightsLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/allrigths" />
+
+</LinearLayout>
