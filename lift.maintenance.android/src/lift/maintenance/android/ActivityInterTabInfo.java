@@ -23,14 +23,21 @@ public class ActivityInterTabInfo extends Activity implements OnClickListener{
 	private InterventionModel intervention;
 	private MachineModel machine;
 	
-	private TextView tvMachineName;
-	private TextView tvMachineAdresse;
+	private TextView tvSector;
+	private TextView tvDept;
+	private TextView tvCity;
+	private TextView tvMachineAddress;
+	private TextView tvIndex;
+	private TextView tvContract;
+	private TextView tvType;
 	private TextView tvDateLabel;
 	private TextView tvDate;
 	private TextView tvInfo;
 	private TextView tvState;
 	private CheckBox cbCable;
 	private CheckBox cbParachute;
+	private TextView tvLast;
+	private TextView tvNext;
 	
 	private Button bToExecute;
 	private Button bToWait;
@@ -40,26 +47,43 @@ public class ActivityInterTabInfo extends Activity implements OnClickListener{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.intertabinfo);
+		
 		
 		inter_id = this.getIntent().getExtras().getInt("inter_id");
 		
 		context = getApplicationContext();
         manager = new DataBaseManager(context);
         res = context.getResources();
+		
+        manager.open();
+        intervention = (InterventionModel) manager.intervention.getWithBaseId(inter_id).get(0);
+        manager.close();
         
-        tvMachineName = (TextView)findViewById(R.id.tvMachineName);
-        tvMachineAdresse = (TextView)findViewById(R.id.tvMachineAdresse);
+        if(intervention.getType().equals("maintenance")){
+        	setContentView(R.layout.intertabinfomnt);
+        	cbCable = (CheckBox)findViewById(R.id.cbCable);
+        	cbCable.setOnClickListener(this);
+        	
+        	cbParachute = (CheckBox)findViewById(R.id.cbParachute);
+        	cbParachute.setOnClickListener(this);
+        }
+        else{
+        	setContentView(R.layout.intertabinfopanne);
+        	tvLast = (TextView)findViewById(R.id.tvLast);
+        	tvNext = (TextView)findViewById(R.id.tvNext);
+        }
+        
+        tvSector = (TextView)findViewById(R.id.tvSetcor);
+        tvDept = (TextView)findViewById(R.id.tvDept);
+        tvCity = (TextView)findViewById(R.id.tvCity);
+        tvMachineAddress = (TextView)findViewById(R.id.tvMachineAdresse);
+        tvIndex = (TextView)findViewById(R.id.tvIndex);
+        tvContract = (TextView)findViewById(R.id.tvContract);
+        tvType = (TextView)findViewById(R.id.tvType);
     	tvDateLabel = (TextView)findViewById(R.id.tvDateLabel);
     	tvDate = (TextView)findViewById(R.id.tvDate);
     	tvInfo = (TextView)findViewById(R.id.tvInfo);
     	tvState = (TextView)findViewById(R.id.tvState);
-    	
-    	cbCable = (CheckBox)findViewById(R.id.cbCable);
-    	cbCable.setOnClickListener(this);
-    	
-    	cbParachute = (CheckBox)findViewById(R.id.cbParachute);
-    	cbParachute.setOnClickListener(this);
     	
     	bToExecute = (Button)findViewById(R.id.bToExecute);
     	bToExecute.setOnClickListener(this);
@@ -79,11 +103,38 @@ public class ActivityInterTabInfo extends Activity implements OnClickListener{
 		super.onResume();
 		manager.open();
         intervention = (InterventionModel) manager.intervention.getWithBaseId(inter_id).get(0);
-        machine = manager.machine.getWithBaseId(intervention.getMachineId()).get(0);
+        machine = (MachineModel) manager.machine.getWithBaseId(intervention.getMachineId()).get(0);
         manager.close();
         
-        tvMachineName.setText(intervention.getMachineName());
-        tvMachineAdresse.setText(machine.getMachineAddress());
+        tvSector.setText(machine.getArea());
+        String zip = machine.getZip().substring(0, 2);
+        if(zip != "75")
+        	tvDept.setText(zip);
+        else{
+        	int district = Integer.parseInt(machine.getZip().substring(3));
+        	String ext;
+        	switch(district){
+        	case 1:
+        		ext = getString(R.string.first);
+        		break;
+        	case 2:
+        		ext = getString(R.string.second);
+        		break;
+        	case 3:
+        		ext = getString(R.string.third);
+        		break;
+        	default:
+        		ext = getString(R.string.authers);
+        		break;
+        	}
+        	tvDept.setText(district + ext);
+        }
+        tvCity.setText(machine.getCity());
+        String[] mn = intervention.getMachineName().split("[/,]");
+        tvIndex.setText(mn[1]);
+        tvContract.setText(mn[0]);
+        tvType.setText(res.getString(res.getIdentifier(machine.getGenre(),"string","lift.maintenance.android")));
+        tvMachineAddress.setText(machine.getMachineAddress());
         tvInfo.setText(intervention.getInformation());
         tvState.setText(res.getString(res.getIdentifier(intervention.getState(), "string","lift.maintenance.android")));
     	
@@ -91,8 +142,8 @@ public class ActivityInterTabInfo extends Activity implements OnClickListener{
     		tvDateLabel.setText(context.getText(R.string.callDateLabel));
     		tvDate.setText(intervention.getCallDay().toLocaleString());
     		
-    		cbCable.setVisibility(4);
-    		cbParachute.setVisibility(4);
+    		tvLast.setText(machine.getLastInter().toLocaleString());
+    		tvNext.setText(machine.getNextInter().toLocaleString());
     	}
     	else{
     		tvDateLabel.setText(context.getText(R.string.deadlineDate));
@@ -104,7 +155,6 @@ public class ActivityInterTabInfo extends Activity implements OnClickListener{
         
         setButtonsAccess();
 	}
-
 	
 	private void setButtonsAccess() {
 		if(intervention.getState().equals(res.getResourceEntryName(R.string.considering))){
@@ -149,7 +199,6 @@ public class ActivityInterTabInfo extends Activity implements OnClickListener{
 		}
 	}
 
-	@Override
 	public void onClick(View v) {
 		switch(v.getId()){
 		case R.id.bToExecute:

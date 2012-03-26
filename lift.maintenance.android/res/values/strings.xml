@@ -53,4 +53,27 @@
 	<string name="SyncMachine"  >Machines       |\t%1$d\t|\t%2$d\t|\t%3$d\t|\n</string>
 	<string name="SyncInterv"   >Interventions  |\t%1$d\t|\t%2$d\t|\t%3$d\t|\n</string>
 	<string name="allrigths">Open Solutis Services 2011 All Rights Reserved</string>
+	<string name="allready_sync">Synchronization already in progress</string>
+	<string name="labSector">Sector :</string>
+	<string name="labDept">Departement :</string>
+	<string name="labCity">City :</string>
+	<string name="labMachineAddress">Address :</string>
+	<string name="labMachineName">Name :</string>
+	<string name="first">st</string>
+	<string name="second">nd</string>
+	<string name="third">rd</string>
+	<string name="authers">th</string>
+	<string name="labInfos">Informations :</string>
+	<string name="labIndex">Index :</string>
+	<string name="labContract">Contract N° :</string>
+	<string name="labType">Machine Type :</string>
+	<string name="L">Lift</string>
+    <string name="H">Hoist</string>
+    <string name="CL">Car Lift</string>
+    <string name="DL">Disable Lift</string>
+    <string name="P">Platform</string>
+    <string name="BP">Barrier/portal</string>
+    <string name="O">Others</string>
+    <string name="labLast">Last Maintenance</string>
+    <string name="labNext">Next Maintenance</string>
 </resources>

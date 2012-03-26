@@ -55,7 +55,6 @@ public class ActivityInterTabSign extends Activity implements OnClickListener {
 			etSignName.setText(inter.getSignatureName());
 	}
 
-	@Override
 	public void onClick(View v) {
 		inter.setSignatureName(etSignName.getText().toString());
 		inter.setSignaturePicture(ivSign.getByteArray());

@@ -27,8 +27,11 @@ public class DataBaseCreator extends SQLiteOpenHelper {
 	private static final String CREATE_TABLE_MACHINE = Types.create + MachineModel.tableName + Types.begin
 			+ MachineModel.listFields[0] + Types.pkey + Types.next + MachineModel.listFields[1] + Types.intnotnull + Types.next
 			+ MachineModel.listFields[2] + Types.textnotnull + Types.next + MachineModel.listFields[3] + Types.textnotnull + Types.next
-			+ MachineModel.listFields[4] + Types.text + Types.next + MachineModel.listFields[5] + Types.intnotnull + Types.next
-			+ MachineModel.listFields[6] + Types.textnotnull + Types.end;
+			+ MachineModel.listFields[4] + Types.textnotnull + Types.next + MachineModel.listFields[5] + Types.text + Types.next
+			+ MachineModel.listFields[6] + Types.intnotnull + Types.next + MachineModel.listFields[7] + Types.text + Types.next
+			+ MachineModel.listFields[8] + Types.text + Types.next + MachineModel.listFields[9] + Types.text + Types.next
+			+ MachineModel.listFields[10] + Types.text + Types.next + MachineModel.listFields[11] + Types.text + Types.next
+			+ MachineModel.listFields[12] + Types.text + Types.end;
 	
 	private static final String CREATE_TABLE_INTERVENTION = Types.create + InterventionModel.tableName + Types.begin
 			+ InterventionModel.listFields[0] + Types.pkey + Types.next + InterventionModel.listFields[1] + Types.intnotnull + Types.next

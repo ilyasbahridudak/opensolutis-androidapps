@@ -16,11 +16,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
 
+@SuppressWarnings("unchecked")
 public class Synchro {
 	
 	public static String synchro(SharedPreferences prefs, Context context, DataBaseManager manager){
 		xmlrpcAccess access = new xmlrpcAccess();
-		
+			
 		HashMap<Integer, Integer> modifs = new HashMap<Integer, Integer>();
 		for(int i = 1; i <= 15; i++)
 			modifs.put(i, 0);
@@ -63,7 +64,6 @@ public class Synchro {
 		return message;
 	}
 	
-	@SuppressWarnings("unchecked")
 	private static HashMap<Integer, Integer> synchroCheckList(xmlrpcAccess access, DataBaseManager manager, HashMap<Integer, Integer> modifs){
 		
 		
@@ -144,7 +144,6 @@ public class Synchro {
 		return modifs;
 	}
 	
-	@SuppressWarnings("unchecked")
 	private static HashMap<Integer, Integer> synchroCheckLine(xmlrpcAccess access, DataBaseManager manager, Integer chklstId, HashMap<Integer, Integer> modifs){
 		
 		//Création de la conddition de recherche [["list_id", "=", chklstId]]
@@ -222,7 +221,6 @@ public class Synchro {
 		return modifs;
 	}
 
-	@SuppressWarnings("unchecked")
 	private static HashMap<Integer, Integer> synchroCodification(xmlrpcAccess access, DataBaseManager manager, HashMap<Integer, Integer> modifs){
 
 		//Construction de la condition de recherche [["id",">",0]]
@@ -304,7 +302,6 @@ public class Synchro {
 		return modifs;
 	}
 
-	@SuppressWarnings("unchecked")
 	private static HashMap<Integer, Integer> synchroMachine(xmlrpcAccess access, DataBaseManager manager, Context context, List<Object> machine_ids, HashMap<Integer, Integer> modifs){
 		
 		//lecture des enregistrements existants dans Android
@@ -334,21 +331,38 @@ public class Synchro {
 					MachineModel machine = new MachineModel();
 					
 					machine.setBaseId((Integer)value.get(MachineModel.listFields[0]));
+					machine.setName((String)value.get(MachineModel.listFields[2]));
+					machine.setContractName((String)((Object[])value.get(MachineModel.listFields[3]))[1]);
 					
-					machine.setContractName((String)((Object[])value.get(MachineModel.listFields[2]))[1]);
-					
-					if(!value.get(MachineModel.listFields[3]).equals(false))
-						machine.setMachineAddress((String)((Object[])value.get(MachineModel.listFields[3]))[1]);
+					if(!value.get(MachineModel.listFields[4]).equals(false)){
+						machine.setMachineAddress((String)((Object[])value.get(MachineModel.listFields[4]))[1]);
+						Object address = access.Read("res.partner.address", (Integer)((Object[])value.get(MachineModel.listFields[4]))[0], new String[] {"zip", "city"});
+						if(!address.getClass().equals(Integer.TYPE)){
+							if(!((HashMap<String, String>) address).get("zip").equals(false))
+								machine.setZip(((HashMap<String, String>)address).get("zip"));
+							if(!((HashMap<String, String>) address).get("city").equals(false))
+								machine.setCity(((HashMap<String, String>)address).get("city"));
+						}
+					}
 					else
 						machine.setMachineAddress(context.getString(R.string.no_value_error));
 					
-					if(!value.get(MachineModel.listFields[4]).equals(false))
+					if(!value.get(MachineModel.listFields[5]).equals(false))
 						machine.setCaretakerAddress((String)((Object[])value.get(MachineModel.listFields[4]))[1]);
 					
-					if(!value.get(MachineModel.listFields[5]).equals(false))
+					if(!value.get(MachineModel.listFields[6]).equals(false))
 						machine.setCheckListId((Integer)((Object[])value.get(MachineModel.listFields[5]))[0]);
-						
-					machine.setName((String)value.get(MachineModel.listFields[6]));
+					
+					if(!value.get(MachineModel.listFields[7]).equals(false))
+						machine.setArea((String)((Object[])value.get(MachineModel.listFields[7]))[1]);
+					
+					if(!value.get(MachineModel.listFields[8]).equals(false))
+						machine.setGenre((String)value.get(MachineModel.listFields[8]));
+					
+					Timestamp[] mnts = getMaintenances(machine.getBaseId(), access);
+					
+					machine.setLastInter(mnts[0]);
+					machine.setNextInter(mnts[1]);
 					
 					manager.machine.insert(machine);
 					modifs.put(11, modifs.get(11)+1);
@@ -367,28 +381,55 @@ public class Synchro {
 				for(Object valueObj : (Object[])ERPUpdate){
 					HashMap<Object, Object> value = (HashMap<Object, Object>)valueObj;
 					
-					if(value.get(MachineModel.listFields[3]).equals(false))
-						value.put(MachineModel.listFields[3], new Object[] {0, context.getString(R.string.no_value_error)});
+					String city = "";
+					String zip = "";
+					
 					if(value.get(MachineModel.listFields[4]).equals(false))
-						value.put(MachineModel.listFields[4], new Object[] {0, ""});
+						value.put(MachineModel.listFields[4], new Object[] {0, context.getString(R.string.no_value_error)});
+					else{
+						Object address = access.Read("res.partner.address", (Integer)((Object[])value.get(MachineModel.listFields[4]))[0], new String[] {"zip", "city"});
+						if(!address.getClass().equals(Integer.TYPE)){
+							zip = ((HashMap<String, String>)address).get("zip");
+							city = ((HashMap<String, String>)address).get("city");
+						}
+					}
 					if(value.get(MachineModel.listFields[5]).equals(false))
 						value.put(MachineModel.listFields[5], new Object[] {0, ""});
+					if(value.get(MachineModel.listFields[6]).equals(false))
+						value.put(MachineModel.listFields[6], new Object[] {0, ""});
+					if(value.get(MachineModel.listFields[7]).equals(false))
+						value.put(MachineModel.listFields[7], new Object[] {0, 0});
+					if(value.get(MachineModel.listFields[8]).equals(false))
+						value.put(MachineModel.listFields[8], "");
 					
-					MachineModel machine = manager.machine.getWithBaseId((Integer)value.get(MachineModel.listFields[0])).get(0);
+					MachineModel machine = (MachineModel) manager.machine.getWithBaseId((Integer)value.get(MachineModel.listFields[0])).get(0);
+					
+					Timestamp[] mnts = getMaintenances(machine.getBaseId(), access);
 					
 					//vérification de la valeur des champs pour ne mettre à jour que les valeurs qui ont changé
-					if(!machine.getContactName().equals(((Object[])value.get(MachineModel.listFields[2]))[1]) ||
-							!machine.getMachineAddress().equals(((Object[])value.get(MachineModel.listFields[3]))[1]) ||
-							!machine.getCaretakerAddress().equals(((Object[])value.get(MachineModel.listFields[4]))[1]) ||
-							machine.getCheckListId() != (Integer)((Object[])value.get(MachineModel.listFields[5]))[0] ||
-							!machine.getName().equals(value.get(MachineModel.listFields[6]))){
+					if(!!machine.getName().equals(value.get(MachineModel.listFields[2])) ||
+							machine.getContactName().equals(((Object[])value.get(MachineModel.listFields[3]))[1]) ||
+							!machine.getMachineAddress().equals(((Object[])value.get(MachineModel.listFields[4]))[1]) ||
+							!machine.getCaretakerAddress().equals(((Object[])value.get(MachineModel.listFields[5]))[1]) ||
+							machine.getCheckListId() != (Integer)((Object[])value.get(MachineModel.listFields[6]))[0] ||
+							machine.getArea() != (String)((Object[])value.get(MachineModel.listFields[7]))[1] ||
+							machine.getGenre() != (String)value.get(MachineModel.listFields[8]) ||
+							!machine.getZip().equals(zip) || !machine.getCity().equals(city) || 
+							(machine.getLastInter()!=null && mnts[0]!=null && !machine.getLastInter().equals(mnts[0])) ||
+							(machine.getNextInter()!=null && mnts[1]!=null && !machine.getLastInter().equals(mnts[1]))){
 						
 						//mise à jour des valeurs
-						machine.setContractName((String)((Object[])value.get(MachineModel.listFields[2]))[1]);
-						machine.setMachineAddress((String)((Object[])value.get(MachineModel.listFields[3]))[1]);
-						machine.setCaretakerAddress((String)((Object[])value.get(MachineModel.listFields[4]))[1]);
-						machine.setCheckListId((Integer)((Object[])value.get(MachineModel.listFields[5]))[0]);
-						machine.setName((String)value.get(MachineModel.listFields[6]));
+						machine.setName((String)value.get(MachineModel.listFields[2]));
+						machine.setContractName((String)((Object[])value.get(MachineModel.listFields[3]))[1]);
+						machine.setMachineAddress((String)((Object[])value.get(MachineModel.listFields[4]))[1]);
+						machine.setCaretakerAddress((String)((Object[])value.get(MachineModel.listFields[5]))[1]);
+						machine.setCheckListId((Integer)((Object[])value.get(MachineModel.listFields[6]))[0]);
+						machine.setArea((String)((Object[])value.get(MachineModel.listFields[7]))[1]);
+						machine.setGenre((String)value.get(MachineModel.listFields[8]));
+						machine.setZip(zip);
+						machine.setCity(city);
+						machine.setLastInter(mnts[0]);
+						machine.setNextInter(mnts[1]);
 						manager.machine.update(machine.getBaseId(), machine);
 						modifs.put(12, modifs.get(12)+1);
 					}
@@ -399,7 +440,41 @@ public class Synchro {
 		return modifs;
 	}
 	
-	@SuppressWarnings("unchecked")
+	private static Timestamp[] getMaintenances(int machine_id, xmlrpcAccess access) {
+		Timestamp last=null;
+		Timestamp next=null;
+		Object query = new  ArrayList<Object>();
+		((ArrayList<Object>)query).add(CreateTuple("machine_id","=",machine_id));
+		((ArrayList<Object>)query).add(CreateTuple("state","=","done"));
+		((ArrayList<Object>)query).add(CreateTuple("type","=","maintenance"));
+		
+		Object last_ids = access.Search(InterventionModel.modelName, query);
+		if(!last_ids.getClass().equals(Integer.TYPE)){
+			Object last_objs = access.Read(InterventionModel.modelName, last_ids, InterventionModel.listFields);
+			if(!last_objs.getClass().equals(Integer.TYPE)){
+				for(Object inter : (Object[])last_objs){
+					if(last == null || last.before(TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[9]),false)))
+						last = TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[9]),false);
+				}
+			}
+		}
+		
+		((ArrayList<Object>)query).set(1, CreateTuple("state","!=","done"));
+		
+		Object next_ids = access.Search(InterventionModel.modelName, query);
+		if(!next_ids.getClass().equals(Integer.TYPE)){
+			Object next_objs = access.Read(InterventionModel.modelName, next_ids, InterventionModel.listFields);
+			if(!next_objs.getClass().equals(Integer.TYPE)){
+				for(Object inter : (Object[])next_objs)
+				if(next == null || next.after(TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[22]), false))){
+					next = TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[22]), false);
+				}
+			}
+		}
+		
+		return new Timestamp[] {last, next};
+	}
+
 	private static HashMap<Integer, Integer> synchroInterventions(xmlrpcAccess access, DataBaseManager manager,	Context context, HashMap<Integer, Integer> modifs) {
 		List<Object> machine_ids = new ArrayList<Object>();
 		Object query;

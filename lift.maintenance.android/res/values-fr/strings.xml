@@ -52,4 +52,5 @@
 	<string name="SyncCodif"    >Codifications  |\t%1$d\t|\t%2$d\t|\t%3$d\t|\n</string>
 	<string name="SyncMachine"  >Appareils      |\t%1$d\t|\t%2$d\t|\t%3$d\t|\n</string>
 	<string name="SyncInterv"   >Interventions  |\t%1$d\t|\t%2$d\t|\t%3$d\t|\n</string>
+	<string name="allready_sync">Synchronisation déjà en cours</string>
 </resources>

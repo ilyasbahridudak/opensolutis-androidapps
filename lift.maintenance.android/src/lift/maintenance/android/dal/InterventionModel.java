@@ -27,8 +27,7 @@ public class InterventionModel extends TableModel {
 	private String machine_name;
 	private Boolean parachute;
 	private Boolean cable;
-	private String last_incidents;
-    
+	private String last_incidents;    
 	
     public static final String modelName = "intervention.intervention";
     public static final String tableName = modelName.replace(".", "_");
@@ -176,7 +175,7 @@ public class InterventionModel extends TableModel {
 	public void setLastIncidents(String last_incidents){
 		this.last_incidents = last_incidents;
 	}
-	
+		
 	@Override
 	public  List<Object> toArray() {
 		List<Object> list = super.toArrayBase();

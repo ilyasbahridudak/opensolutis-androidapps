@@ -30,9 +30,10 @@
     </style>
     
     <style name="interLabel">
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:textColor">#eeeeee</item>
         <item name="android:textSize">12dp</item>
-        <item name="android:textStyle">bold</item>:
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">#80990000</item>
     </style>
     
     <style name="allRightsLabel">
@@ -53,4 +54,9 @@
 		<item name="android:activityCloseExitAnimation">@anim/activity_close_exit</item>
 		<item name="android:activityCloseEnterAnimation">@anim/activity_close_enter</item>
 	</style>
+    <style name="interValue">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:textStyle">bold</item>:
+    </style>
 </resources>

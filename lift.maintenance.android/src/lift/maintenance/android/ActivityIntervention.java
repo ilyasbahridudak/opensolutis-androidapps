@@ -36,7 +36,7 @@ public class ActivityIntervention extends TabActivity {
 		manager = new DataBaseManager(getApplicationContext());
 		manager.open();
 		inter = (InterventionModel)(manager.intervention.getWithBaseId(inter_id).get(0));
-		machine = manager.machine.getWithBaseId(inter.getMachineId()).get(0);
+		machine = (MachineModel) manager.machine.getWithBaseId(inter.getMachineId()).get(0);
 		if(inter.getState().equals(res.getResourceEntryName(R.string.draft))){
 			inter.setState(res.getResourceEntryName(R.string.considering));
 			if(inter.getTakeIntoAccountDay() == null)

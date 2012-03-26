@@ -12,7 +12,7 @@ public class DataBaseManager {
 	
 	private SQLiteDatabase bdd;
 	private DataBaseCreator base;
-	private static int version = 2;
+	private static int version = 5;
 	
 	private static final String lift_mnt_bdd = "lift_maintenance.db";
 	
@@ -291,79 +291,4 @@ public class DataBaseManager {
 		}
 	}
 
-	//gestion des machines
-	public class MachineManager{
-		public SQLiteDatabase bdd;
-		
-		public MachineManager(){
-			bdd = null;
-		}
-		
-		public long insert(MachineModel machine){
-			ContentValues values = new ContentValues();
-			values.put(MachineModel.listFields[1], machine.getBaseId());
-			values.put(MachineModel.listFields[2], machine.getContactName());
-			values.put(MachineModel.listFields[3], machine.getMachineAddress());
-			values.put(MachineModel.listFields[4], machine.getCaretakerAddress());
-			values.put(MachineModel.listFields[5], machine.getCheckListId());
-			values.put(MachineModel.listFields[6], machine.getName());
-			return bdd.insert(MachineModel.tableName, null, values);
-		}
-		
-		public int update(int id, MachineModel machine){
-			ContentValues values = new ContentValues();
-			values.put(MachineModel.listFields[1], machine.getBaseId());
-			values.put(MachineModel.listFields[2], machine.getContactName());
-			values.put(MachineModel.listFields[3], machine.getMachineAddress());
-			values.put(MachineModel.listFields[4], machine.getCaretakerAddress());
-			values.put(MachineModel.listFields[5], machine.getCheckListId());
-			values.put(MachineModel.listFields[6], machine.getName());
-			return bdd.update(CodificationModel.tableName, values, MachineModel.listFields[1] + "=" + id, null);
-		}
-		
-		public int remove(int id){
-			return bdd.delete(MachineModel.tableName, MachineModel.listFields[1] + "=" + id , null);
-		}
-		
-		public List<MachineModel> getWithBaseId(Integer Id){
-			Cursor c = bdd.query(MachineModel.tableName, MachineModel.listFields, MachineModel.listFields[1] + "=" + Id, null, null, null, null);
-			return cursorToMachine(c);
-		}
-		
-		public List<MachineModel> getAll(){
-			Cursor c = bdd.query(MachineModel.tableName, MachineModel.listFields, null, null, null, null, null);
-			return cursorToMachine(c);
-		}
-		
-		public Object getAllIds(){
-			List<Object> list = new ArrayList<Object>();
-			List<MachineModel> machines = getAll();
-			
-			for (MachineModel mach : machines) {
-				list.add((Integer)mach.getBaseId());
-			}
-			
-			return list;
-		}
-
-		private List<MachineModel> cursorToMachine(Cursor c) {
-			List<MachineModel> machines = new ArrayList<MachineModel>();
-			c.moveToFirst();
-			
-			for(int i=0; i<c.getCount();i++){
-				MachineModel machine = new MachineModel();
-				machine.setId(c.getInt(0));
-				machine.setBaseId(c.getInt(1));
-				machine.setContractName(c.getString(2));
-				machine.setMachineAddress(c.getString(3));
-				machine.setCaretakerAddress(c.getString(4));
-				machine.setCheckListId(c.getInt(5));
-				machine.setName(c.getString(6));
-				machines.add(machine);
-				c.moveToNext();
-			}
-			c.close();
-			return machines;
-		}
-	}
 }

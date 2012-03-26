@@ -20,17 +20,14 @@ public class AdapterCheckLine extends BaseAdapter {
 		this.lst = lst;
 	}
 	
-	@Override
 	public int getCount() {
 		return lst.size();
 	}
 
-	@Override
 	public Object getItem(int position) {
 		return lst.get(position);
 	}
 
-	@Override
 	public long getItemId(int position) {
 		return position;
 	}
@@ -40,7 +37,6 @@ public class AdapterCheckLine extends BaseAdapter {
 		TextView tvCheckLineFrequency;
 	}
 	
-	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 ViewHolder holder;
 		
