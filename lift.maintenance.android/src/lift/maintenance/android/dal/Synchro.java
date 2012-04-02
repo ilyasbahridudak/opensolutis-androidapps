@@ -20,6 +20,9 @@ import android.util.Base64;
 public class Synchro {
 	
 	public static String synchro(SharedPreferences prefs, Context context, DataBaseManager manager){
+		Date demo = new Date(2012,05,31,23,59,59);
+		Date now = new Date();
+		if(now.before(demo)){
 		xmlrpcAccess access = new xmlrpcAccess();
 			
 		HashMap<Integer, Integer> modifs = new HashMap<Integer, Integer>();
@@ -62,6 +65,9 @@ public class Synchro {
 		message += context.getString(R.string.SyncInterv,    modifs.get(13), modifs.get(14), modifs.get(15));
 		
 		return message;
+		}
+		else
+			return(context.getString(R.string.enddemo));
 	}
 	
 	private static HashMap<Integer, Integer> synchroCheckList(xmlrpcAccess access, DataBaseManager manager, HashMap<Integer, Integer> modifs){
@@ -75,7 +81,7 @@ public class Synchro {
 		Object ERPIds = access.Search("contract.check.list", query);
 			
 		//Vérification du résultat de la recherche
-		if(!ERPIds.getClass().equals(Integer.class)){
+		if(!ERPIds.getClass().equals(String.class)){
 			
 			//lecture des enregistrements existants dans Android
 			Object AndroidIds = manager.checklist.getAllIds();
@@ -100,7 +106,7 @@ public class Synchro {
 				Object ERPInsert = access.Read("contract.check.list", ((List<Object>)Ids2Insert), CheckListModel.listFields);
 			    
 				//vérification du resultat de la lecture
-				if(!ERPInsert.getClass().equals(Integer.class)){
+				if(!ERPInsert.getClass().equals(String.class)){
 					for(Object valueObj : (Object[])ERPInsert){
 						HashMap<Object, Object> values = (HashMap<Object, Object>)valueObj;
 						
@@ -124,7 +130,7 @@ public class Synchro {
 				Object ERPUpdate = access.Read("contract.check.list", Ids2Update, CheckListModel.listFields);
 				
 				//vérification du resultat de la lecture
-				if(!ERPUpdate.getClass().equals(Integer.class)){
+				if(!ERPUpdate.getClass().equals(String.class)){
 					for(Object valueObj : (Object[])ERPUpdate){
 						HashMap<Object, Object> valuesERP = (HashMap<Object, Object>)valueObj;
 						CheckListModel valuesAndroid = manager.checklist.getWithBaseID((Integer)valuesERP.get(CheckListModel.listFields[0])).get(0);
@@ -153,7 +159,7 @@ public class Synchro {
 		Object ERPIds = access.Search("contract.check.line", query);
 		
 		//vérification du résultat de la recherche
-		if(!ERPIds.getClass().equals(Integer.class)){
+		if(!ERPIds.getClass().equals(String.class)){
 						
 			//lecture des enregistrements existants dans Android
 			Object AndroidIds = manager.checkline.getAllIds(chklstId);
@@ -174,7 +180,7 @@ public class Synchro {
 				Object ERPInsert = access.Read("contract.check.line", Ids2Insert, CheckLineModel.listFields);
 				
 				//vérification du resultat de la lecture
-				if(!ERPInsert.getClass().equals(Integer.class)){
+				if(!ERPInsert.getClass().equals(String.class)){
 					
 					for(Object valueObj : (Object[])ERPInsert){
 						HashMap<Object, Object> values = (HashMap<Object, Object>)valueObj;
@@ -199,7 +205,7 @@ public class Synchro {
 				Object ERPUpdate = access.Read("contract.check.line", Ids2Update, CheckLineModel.listFields);
 				
 				//vérification du resultat de la lecture
-				if(!ERPUpdate.getClass().equals(Integer.class)){
+				if(!ERPUpdate.getClass().equals(String.class)){
 					for(Object valueObj : (Object[])ERPUpdate){
 						HashMap<Object, Object> valuesERP = (HashMap<Object, Object>)valueObj;
 					
@@ -231,7 +237,7 @@ public class Synchro {
 		Object ERPIds = access.Search("intervention.codification", query);
 					
 		//Vérification du résultat de la recherche
-		if(!ERPIds.getClass().equals(Integer.class)){
+		if(!ERPIds.getClass().equals(String.class)){
 			
 			//lecture des enregistrements existants dans Android
 			Object AndroidIds = manager.code.getAllIds();
@@ -252,7 +258,7 @@ public class Synchro {
 				Object ERPInsert = access.Read("intervention.codification", Ids2Insert, CodificationModel.listFields);
 				
 				//vérification du resultat de la lecture
-				if(!ERPInsert.getClass().equals(Integer.class)){
+				if(!ERPInsert.getClass().equals(String.class)){
 					for(Object valueObj : (Object[])ERPInsert){
 						HashMap<Object, Object> values = (HashMap<Object, Object>)valueObj;
 						CodificationModel code  = new CodificationModel();
@@ -276,7 +282,7 @@ public class Synchro {
 				Object ERPUpdate = access.Read("intervention.codification", Ids2Update, CodificationModel.listFields);
 				
 				//vérification du resultat de la lecture
-				if(!ERPUpdate.getClass().equals(Integer.class)){
+				if(!ERPUpdate.getClass().equals(String.class)){
 					for(Object valueObj : (Object[])ERPUpdate){
 						HashMap<Object, Object> valuesERP = (HashMap<Object, Object>)valueObj;
 						CodificationModel valuesAndroid = manager.code.getWithBaseId((Integer) valuesERP.get(CodificationModel.listFields[0])).get(0);
@@ -325,7 +331,7 @@ public class Synchro {
 			Object ERPInsert = access.Read("contract.machine", ((List<Object>)Ids2Insert), MachineModel.listFields);
 		    
 			//vérification du resultat de la lecture
-			if(!ERPInsert.getClass().equals(Integer.class)){
+			if(!ERPInsert.getClass().equals(String.class)){
 				for(Object valueObj : (Object[])ERPInsert){
 					HashMap<Object, Object> value = (HashMap<Object, Object>)valueObj;
 					MachineModel machine = new MachineModel();
@@ -337,7 +343,7 @@ public class Synchro {
 					if(!value.get(MachineModel.listFields[4]).equals(false)){
 						machine.setMachineAddress((String)((Object[])value.get(MachineModel.listFields[4]))[1]);
 						Object address = access.Read("res.partner.address", (Integer)((Object[])value.get(MachineModel.listFields[4]))[0], new String[] {"zip", "city"});
-						if(!address.getClass().equals(Integer.class)){
+						if(!address.getClass().equals(String.class)){
 							if(!((HashMap<String, String>) address).get("zip").equals(false))
 								machine.setZip(((HashMap<String, String>)address).get("zip"));
 							if(!((HashMap<String, String>) address).get("city").equals(false))
@@ -382,7 +388,7 @@ public class Synchro {
 			Object ERPUpdate = access.Read("contract.machine", ((List<Object>)Ids2Update), MachineModel.listFields);
 		    
 			//vérification du resultat de la lecture
-			if(!ERPUpdate.getClass().equals(Integer.class)){
+			if(!ERPUpdate.getClass().equals(String.class)){
 				for(Object valueObj : (Object[])ERPUpdate){
 					HashMap<Object, Object> value = (HashMap<Object, Object>)valueObj;
 					
@@ -393,7 +399,7 @@ public class Synchro {
 						value.put(MachineModel.listFields[4], new Object[] {0, context.getString(R.string.no_value_error)});
 					else{
 						Object address = access.Read("res.partner.address", (Integer)((Object[])value.get(MachineModel.listFields[4]))[0], new String[] {"zip", "city"});
-						if(!address.getClass().equals(Integer.class)){
+						if(!address.getClass().equals(String.class)){
 							zip = ((HashMap<String, String>)address).get("zip");
 							city = ((HashMap<String, String>)address).get("city");
 						}
@@ -465,9 +471,9 @@ public class Synchro {
 		((ArrayList<Object>)query).add(CreateTuple("type","=","maintenance"));
 		
 		Object last_ids = access.Search(InterventionModel.modelName, query);
-		if(!last_ids.getClass().equals(Integer.class)){
+		if(!last_ids.getClass().equals(String.class)){
 			Object last_objs = access.Read(InterventionModel.modelName, last_ids, InterventionModel.listFields);
-			if(!last_objs.getClass().equals(Integer.class)){
+			if(!last_objs.getClass().equals(String.class)){
 				for(Object inter : (Object[])last_objs){
 					if(last == null || last.before(TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[9]),false)))
 						last = TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[9]),false);
@@ -478,9 +484,9 @@ public class Synchro {
 		((ArrayList<Object>)query).set(1, CreateTuple("state","!=","done"));
 		
 		Object next_ids = access.Search(InterventionModel.modelName, query);
-		if(!next_ids.getClass().equals(Integer.class)){
+		if(!next_ids.getClass().equals(String.class)){
 			Object next_objs = access.Read(InterventionModel.modelName, next_ids, InterventionModel.listFields);
-			if(!next_objs.getClass().equals(Integer.class)){
+			if(!next_objs.getClass().equals(String.class)){
 				for(Object inter : (Object[])next_objs)
 				if(next == null || next.after(TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[22]), false))){
 					next = TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[22]), false);
@@ -504,7 +510,7 @@ public class Synchro {
 		Object employeeIds = access.Search("hr.employee", query);
 		
 		//si on l'a trouvé
-		if(!employeeIds.getClass().equals(Integer.class)){
+		if(!employeeIds.getClass().equals(String.class)){
 			empId = ((List<Object>)employeeIds).get(0);
 			
 			//query = [["state","=","draft"],["employee_id", "=", empId]
@@ -515,7 +521,7 @@ public class Synchro {
 			//recherche des interventions
 			Object ERPIds = access.Search(InterventionModel.modelName, query);
 			
-			if(!ERPIds.getClass().equals(Integer.class)){
+			if(!ERPIds.getClass().equals(String.class)){
 				
 				//lecture des enregistrements existants dans Android
 				Object AndroidIds = manager.intervention.getAllIds();
@@ -525,7 +531,7 @@ public class Synchro {
 					Object ERPUpdate = access.Read(InterventionModel.modelName, ((List<Object>)AndroidIds), InterventionModel.listFields);
 					
 					//vérification du resultat de la lecture
-					if(!ERPUpdate.getClass().equals(Integer.class)){
+					if(!ERPUpdate.getClass().equals(String.class)){
 						for(Object valueObj : (Object[])ERPUpdate){
 							HashMap<Object, Object> value = (HashMap<Object, Object>)valueObj;
 							
@@ -662,7 +668,7 @@ public class Synchro {
 					Object ERPInsert = access.Read(InterventionModel.modelName, ((List<Object>)Ids2Insert), InterventionModel.listFields);
 					
 					//vérification du resultat de la lecture
-					if(!ERPInsert.getClass().equals(Integer.class)){
+					if(!ERPInsert.getClass().equals(String.class)){
 						for(Object valueObj : (Object[])ERPInsert){
 							HashMap<Object, Object> value = (HashMap<Object, Object>)valueObj;
 							
@@ -699,7 +705,12 @@ public class Synchro {
 								inter.setRequestorPhone((String) value.get(InterventionModel.listFields[11]));
 							
 							inter.setState((String) value.get(InterventionModel.listFields[12]));
-							inter.setType((String) value.get(InterventionModel.listFields[13]));
+							
+							if(!value.get(InterventionModel.listFields[13]).equals(false))
+								inter.setType((String) value.get(InterventionModel.listFields[13]));
+							else
+								inter.setType("incident");
+							
 							inter.setSomeone((Boolean) value.get(InterventionModel.listFields[14]));
 							
 							if(!value.get(InterventionModel.listFields[15]).equals(false))

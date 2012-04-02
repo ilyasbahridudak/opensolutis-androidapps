@@ -197,6 +197,7 @@ public final class R {
         public static final int deadlineDate=0x7f05001e;
         public static final int done=0x7f050023;
         public static final int draft=0x7f05001f;
+        public static final int enddemo=0x7f05004b;
         public static final int first=0x7f05003a;
         public static final int freqHelp=0x7f05000d;
         public static final int frequency=0x7f05000b;
