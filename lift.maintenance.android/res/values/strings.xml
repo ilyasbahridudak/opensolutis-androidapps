@@ -76,4 +76,5 @@
     <string name="O">Others</string>
     <string name="labLast">Last Maintenance</string>
     <string name="labNext">Next Maintenance</string>
+    <string name="enddemo">End Sync</string>
 </resources>
