@@ -12,7 +12,7 @@ public class DataBaseManager {
 	
 	private SQLiteDatabase bdd;
 	private DataBaseCreator base;
-	private static int version = 6;
+	private static int version = 11;
 	
 	private static final String lift_mnt_bdd = "lift_maintenance.db";
 	
@@ -290,5 +290,4 @@ public class DataBaseManager {
 			return codes;
 		}
 	}
-
 }

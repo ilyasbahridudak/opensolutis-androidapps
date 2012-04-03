@@ -44,8 +44,6 @@ public class Synchro {
 				last = null;
 			}
 			Timestamp today = new Timestamp(new Date().getTime());
-			manager.open();
-			
 			if(last == null || (last.getDate() != today.getDate() || last.getMonth() != today.getMonth())){
 				modifs = synchroCheckList(access, manager, modifs);
 				modifs = synchroCodification(access, manager, modifs);
@@ -54,7 +52,6 @@ public class Synchro {
 				editor.commit();
 			}
 			modifs = synchroInterventions(access, manager, context, modifs);
-			manager.close();
 		}
 		
 		String message = context.getString(R.string.SyncOf);
@@ -84,16 +81,28 @@ public class Synchro {
 		if(!ERPIds.getClass().equals(String.class)){
 			
 			//lecture des enregistrements existants dans Android
+			manager.open();
 			Object AndroidIds = manager.checklist.getAllIds();
+			manager.close();
 			
 			//suppression des listes n'exitant plus dans openERP
 			Object Ids2Delete = DiffLists((List<Object>)AndroidIds, (List<Object>)ERPIds);
 			
 			for(Integer Id : (List<Integer>)Ids2Delete){
+				manager.open();
 				manager.checklist.remove(Id);
+				manager.close();
+				
 				modifs.put(1, modifs.get(1)+1);
-				for(Integer line_id : (List<Integer>)manager.checkline.getAllIds(Id)){
+				
+				manager.open();
+				List<Integer> allids = (List<Integer>)manager.checkline.getAllIds(Id);
+				manager.close();
+						
+				for(Integer line_id : allids){
+					manager.open();
 					manager.checkline.remove(line_id);
+					manager.close();
 					modifs.put(4, modifs.get(4)+1);
 				}
 			}
@@ -114,7 +123,9 @@ public class Synchro {
 						CheckListModel list = new CheckListModel();
 						list.setBaseId((Integer)values.get(CheckListModel.listFields[0]));
 						list.setName((String)values.get(CheckListModel.listFields[2]));
+						manager.open();
 						manager.checklist.insert(list);
+						manager.close();
 						modifs.put(2, modifs.get(2)+1);
 						
 						//synchornisation des checklines correspondantes
@@ -133,11 +144,15 @@ public class Synchro {
 				if(!ERPUpdate.getClass().equals(String.class)){
 					for(Object valueObj : (Object[])ERPUpdate){
 						HashMap<Object, Object> valuesERP = (HashMap<Object, Object>)valueObj;
+						manager.open();
 						CheckListModel valuesAndroid = manager.checklist.getWithBaseID((Integer)valuesERP.get(CheckListModel.listFields[0])).get(0);
+						manager.close();
 						
 						if(!valuesAndroid.getName().equals(valuesERP.get(CheckListModel.listFields[2]))){
 							valuesAndroid.setName((String)valuesERP.get(CheckListModel.listFields[2]));
+							manager.open();
 							manager.checklist.update((Integer)valuesERP.get(CheckListModel.listFields[0]), valuesAndroid);
+							manager.close();
 							modifs.put(3, modifs.get(3)+1);
 						}
 						
@@ -162,13 +177,17 @@ public class Synchro {
 		if(!ERPIds.getClass().equals(String.class)){
 						
 			//lecture des enregistrements existants dans Android
+			manager.open();
 			Object AndroidIds = manager.checkline.getAllIds(chklstId);
+			manager.close();
 			
 			//suppression des lines qui n'existent plus dans OpenERP
 			Object Ids2Delete = DiffLists((List<Object>)AndroidIds, (List<Object>)ERPIds);
 			
 			for(Integer Id : (List<Integer>)Ids2Delete){
+				manager.open();
 				manager.checkline.remove(Id);
+				manager.close();
 				modifs.put(4, modifs.get(4)+1);
 			}
 			
@@ -191,7 +210,9 @@ public class Synchro {
 						line.setName((String)values.get(CheckLineModel.listFields[2]));
 						line.setFrequency((String)values.get(CheckLineModel.listFields[3]));
 						line.setListId(chklstId);
+						manager.open();
 						manager.checkline.insert(line);
+						manager.close();
 						modifs.put(5, modifs.get(5)+1);
 					}
 				}
@@ -208,8 +229,10 @@ public class Synchro {
 				if(!ERPUpdate.getClass().equals(String.class)){
 					for(Object valueObj : (Object[])ERPUpdate){
 						HashMap<Object, Object> valuesERP = (HashMap<Object, Object>)valueObj;
-					
+
+						manager.open();
 						CheckLineModel valuesAndroid = manager.checkline.getWithBaseId((Integer) valuesERP.get(CheckLineModel.listFields[0])).get(0);
+						manager.close();
 					
 						//si des valeurs ont changé
 						if(!valuesAndroid.getName().equals(valuesERP.get(CheckLineModel.listFields[2])) ||
@@ -217,7 +240,9 @@ public class Synchro {
 							//mise à jour de la check line
 							valuesAndroid.setName((String)valuesERP.get(CheckLineModel.listFields[2]));
 							valuesAndroid.setFrequency((String)valuesERP.get(CheckLineModel.listFields[3]));
+							manager.open();
 							manager.checkline.update((Integer) valuesERP.get(CheckLineModel.listFields[0]), valuesAndroid);
+							manager.close();
 							modifs.put(6, modifs.get(6)+1);
 						}
 					}
@@ -240,13 +265,17 @@ public class Synchro {
 		if(!ERPIds.getClass().equals(String.class)){
 			
 			//lecture des enregistrements existants dans Android
+			manager.open();
 			Object AndroidIds = manager.code.getAllIds();
+			manager.close();
 			
 			//suppression des listes n'exitant plus dans openERP
 			Object Ids2Delete = DiffLists((List<Object>)AndroidIds, (List<Object>)ERPIds);
 			
 			for(Integer Id : (List<Integer>)Ids2Delete){
+				manager.open();
 				manager.checkline.remove(Id);
+				manager.close();
 				modifs.put(7, modifs.get(7)+1);
 			}
 			
@@ -268,7 +297,9 @@ public class Synchro {
 						code.setType((String)values.get("type"));
 						code.setName((String)values.get("name"));
 						//insertion de la codification
+						manager.open();
 						manager.code.insert(code);
+						manager.close();
 						modifs.put(8, modifs.get(8)+1);
 					}
 				}
@@ -285,7 +316,9 @@ public class Synchro {
 				if(!ERPUpdate.getClass().equals(String.class)){
 					for(Object valueObj : (Object[])ERPUpdate){
 						HashMap<Object, Object> valuesERP = (HashMap<Object, Object>)valueObj;
+						manager.open();
 						CodificationModel valuesAndroid = manager.code.getWithBaseId((Integer) valuesERP.get(CodificationModel.listFields[0])).get(0);
+						manager.close();
 					
 						if(valuesERP.get("parent_id").equals(false))
 							valuesERP.put("parent_id", new Object[] {0, ""});
@@ -298,7 +331,9 @@ public class Synchro {
 							valuesAndroid.setParentId((Integer)((Object[])valuesERP.get("parent_id"))[0]);
 							valuesAndroid.setType((String)valuesERP.get("type"));
 							valuesAndroid.setName((String)valuesERP.get("name"));
+							manager.open();
 							manager.code.update((Integer) valuesERP.get(CodificationModel.listFields[0]), valuesAndroid);
+							manager.close();
 							modifs.put(9, modifs.get(9)+1);
 						}
 					}
@@ -311,7 +346,9 @@ public class Synchro {
 	private static HashMap<Integer, Integer> synchroMachine(xmlrpcAccess access, DataBaseManager manager, Context context, List<Object> machine_ids, HashMap<Integer, Integer> modifs){
 		
 		//lecture des enregistrements existants dans Android
+		manager.open();
 		Object AndroidIds = manager.machine.getAllIds();
+		manager.close();
 		
 		//suppression des listes n'exitant plus dans openERP
 		Object Ids2Delete = DiffLists((List<Object>)AndroidIds, machine_ids);
@@ -319,7 +356,9 @@ public class Synchro {
 		if(!((List<Object>)Ids2Delete).isEmpty()){
 			for(Integer id : (List<Integer>)Ids2Delete )
 			{
+				manager.open();
 				manager.machine.remove(id);
+				manager.close();
 				modifs.put(10, modifs.get(10));
 			}
 		}
@@ -374,8 +413,10 @@ public class Synchro {
 						machine.setNextInter(mnts[1]);
 					
 					machine.setBreakdownStop((Boolean)value.get(MachineModel.listFields[13]));
-					
+
+					manager.open();
 					manager.machine.insert(machine);
+					manager.close();
 					modifs.put(11, modifs.get(11)+1);
 				}
 			}
@@ -412,8 +453,10 @@ public class Synchro {
 						value.put(MachineModel.listFields[7], new Object[] {0, 0});
 					if(value.get(MachineModel.listFields[8]).equals(false))
 						value.put(MachineModel.listFields[8], "");
-					
+
+					manager.open();
 					MachineModel machine = (MachineModel) manager.machine.getWithBaseId((Integer)value.get(MachineModel.listFields[0])).get(0);
+					manager.close();
 					
 					Timestamp[] mnts = getMaintenances(machine.getBaseId(), access);
 					
@@ -443,7 +486,9 @@ public class Synchro {
 							machine.setLastInter(mnts[0]);
 						if(mnts[1]!=null)
 							machine.setNextInter(mnts[1]);
+						manager.open();
 						manager.machine.update(machine.getBaseId(), machine);
+						manager.close();
 						modifs.put(12, modifs.get(12)+1);
 					}
 					
@@ -524,7 +569,9 @@ public class Synchro {
 			if(!ERPIds.getClass().equals(String.class)){
 				
 				//lecture des enregistrements existants dans Android
+				manager.open();
 				Object AndroidIds = manager.intervention.getAllIds();
+				manager.close();
 				
 				//mise a jour des list en cas de modification dans OpenERP
 				if(!((List<Object>)AndroidIds).isEmpty()){
@@ -534,8 +581,10 @@ public class Synchro {
 					if(!ERPUpdate.getClass().equals(String.class)){
 						for(Object valueObj : (Object[])ERPUpdate){
 							HashMap<Object, Object> value = (HashMap<Object, Object>)valueObj;
-							
+
+							manager.open();
 							InterventionModel inter = (InterventionModel)manager.intervention.getWithBaseId((Integer) value.get(InterventionModel.listFields[0])).get(0);
+							manager.close();
 							
 							if(value.get(InterventionModel.listFields[3]).equals(false))
 								value.put(InterventionModel.listFields[3], new Object[] {0, ""});
@@ -628,7 +677,9 @@ public class Synchro {
 								if(res.toString().equals("true")){
 																		
 									if(inter.getState().equals(context.getResources().getResourceEntryName(R.string.done))){
+										manager.open();
 										manager.intervention.remove(inter.getBaseId());
+										manager.close();
 										modifs.put(13, modifs.get(13)+1);
 									}
 									else {
@@ -654,8 +705,10 @@ public class Synchro {
 								inter.setRequestorName((String) value.get(InterventionModel.listFields[10]));
 								inter.setRequestorPhone((String) value.get(InterventionModel.listFields[11]));
 								inter.setLastIncidents((String) value.get(InterventionModel.listFields[24]));
-								
+
+								manager.open();
 								manager.intervention.update(inter.getBaseId(), inter);
+								manager.close();
 							}
 						}
 					}
@@ -733,8 +786,10 @@ public class Synchro {
 							
 							if(!value.get(InterventionModel.listFields[24]).equals(false))
 								inter.setLastIncidents((String) value.get(InterventionModel.listFields[24]));
-							
+
+							manager.open();
 							manager.intervention.insert(inter);
+							manager.close();
 							if(!machine_ids.contains(inter.getMachineId()))
 								machine_ids.add(inter.getMachineId());
 							modifs.put(14, modifs.get(14)+1);

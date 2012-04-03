@@ -73,6 +73,7 @@ public class ActivityInterTabIncident extends Activity implements OnClickListene
 		isResume = true;
 		manager.open();
 		Intervention = (InterventionModel) manager.intervention.getWithBaseId(inter_id).get(0);
+		manager.close();
 		
 		spLocalization.setEnabled(false);
 		spCauses.setEnabled(false);
@@ -92,7 +93,6 @@ public class ActivityInterTabIncident extends Activity implements OnClickListene
 				spCauses.setSelection(((AdapterCodification)spCauses.getAdapter()).getItemIdByBaseId(Intervention.getCauseId()));
 		}
 		
-		manager.close();
 		tvLastFailures.setText(Intervention.getLastIncidents());
 		
 		String Contact = "";
