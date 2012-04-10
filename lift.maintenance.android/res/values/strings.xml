@@ -85,4 +85,8 @@
     <string name="Yes">Yes</string>
     <string name="Cancel">Cancel</string>
     <string name="No">No</string>
+    <string name="NA">NA</string>
+    <string name="cantEditSetting">Can\'t eddit settings, synchronisation in progress</string>
+    <string name="UpdateMessage">There is a new version of this application, do you want to update it?</string>
+    <string name="UpdateTitle">Update Founded</string>
 </resources>

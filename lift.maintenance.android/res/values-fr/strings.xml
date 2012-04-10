@@ -84,4 +84,8 @@
     <string name="Yes">Oui</string>
     <string name="Cancel">Annuler</string>
     <string name="No">Non</string>
+    <string name="NA">NR</string>
+    <string name="cantEditSetting">Impossible d\'editer les paramètres, synchronisation en cours</string>
+    <string name="UpdateMessage">Il y a une nouvelle version de cette application, voulez vous la mettre a jour?</string>
+    <string name="UpdateTitle">Mise à  jour trouvée</string>
 </resources>

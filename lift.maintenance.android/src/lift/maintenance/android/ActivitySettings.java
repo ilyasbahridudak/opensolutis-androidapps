@@ -75,6 +75,7 @@ public class ActivitySettings extends Activity {
         			if(prefs.getString("login", "") == "" || prefs.getString("login", "").equals(etLogin.getText().toString())){
         				Save();
         				finish();
+        				startService(new Intent(ActivitySettings.this, ServiceSync.class));
         			}
         			else{
         				AlertDialog.Builder builder = new AlertDialog.Builder(ActivitySettings.this);
@@ -88,7 +89,7 @@ public class ActivitySettings extends Activity {
         						new Thread((new Runnable() {
         					        public void run() {
         					        	Synchro.supressInterventions(prefs, context,  new DataBaseManager(context));
-        					            
+                						
         					            mHandler.sendEmptyMessage(1);
         					            
         					            Synchro.synchroInterventions(prefs, context, new DataBaseManager(context));
@@ -177,5 +178,7 @@ public class ActivitySettings extends Activity {
 	    		mProgressDialog.dismiss();
 	    	}
 	    }
+	    
+	    
 	};
 }

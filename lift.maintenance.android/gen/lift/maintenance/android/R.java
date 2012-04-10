@@ -166,6 +166,7 @@ public final class R {
         public static final int DL=0x7f050045;
         public static final int H=0x7f050043;
         public static final int L=0x7f050042;
+        public static final int NA=0x7f050054;
         public static final int No=0x7f050053;
         public static final int O=0x7f050048;
         public static final int P=0x7f050046;
@@ -180,6 +181,8 @@ public final class R {
         public static final int SyncMachine=0x7f050031;
         public static final int SyncOf=0x7f05002d;
         public static final int UnknownContact=0x7f050028;
+        public static final int UpdateMessage=0x7f050056;
+        public static final int UpdateTitle=0x7f050057;
         public static final int Yes=0x7f050051;
         public static final int allready_sync=0x7f050034;
         public static final int allrigths=0x7f050033;
@@ -193,6 +196,7 @@ public final class R {
         public static final int bToWait=0x7f050018;
         public static final int bValSig=0x7f05001d;
         public static final int callDateLabel=0x7f050016;
+        public static final int cantEditSetting=0x7f050055;
         public static final int cbCable=0x7f05001b;
         public static final int cbParachute=0x7f05001c;
         public static final int considering=0x7f050020;
