@@ -15,12 +15,13 @@ import com.xmlrpc.access.xmlrpcAccess;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
+import android.util.Log;
 
 @SuppressWarnings("unchecked")
 public class Synchro {
 	
 	public static String synchro(SharedPreferences prefs, Context context, DataBaseManager manager){
-		Date demo = new Date(2012,05,31,23,59,59);
+		Date demo = new Date(2012,06,30,23,59,59);
 		Date now = new Date();
 		if(now.before(demo)){
 		xmlrpcAccess access = new xmlrpcAccess();
@@ -849,7 +850,7 @@ public class Synchro {
 		Object last_ids = access.Search(InterventionModel.modelName, query);
 		if(!last_ids.getClass().equals(String.class)){
 			Object last_objs = access.Read(InterventionModel.modelName, last_ids, InterventionModel.listFields);
-			if(!last_objs.getClass().equals(String.class)){
+			if(!last_objs.getClass().equals(String.class) && last_objs.getClass().equals(Boolean.class)){
 				for(Object inter : (Object[])last_objs){
 					if(last == null || (!((HashMap<String, Object>)inter).get(InterventionModel.listFields[9]).equals(false) &&
 										last.before(TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[9]),false))) )
@@ -863,13 +864,12 @@ public class Synchro {
 		Object next_ids = access.Search(InterventionModel.modelName, query);
 		if(!next_ids.getClass().equals(String.class)){
 			Object next_objs = access.Read(InterventionModel.modelName, next_ids, InterventionModel.listFields);
-			if(!next_objs.getClass().equals(String.class)){
+			if(!next_objs.getClass().equals(String.class) && !next_objs.getClass().equals(Boolean.class))
 				for(Object inter : (Object[])next_objs)
-				if(next == null || (!((HashMap<String, Object>)inter).get(InterventionModel.listFields[22]).equals(false) &&
-								    next.after(TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[22]), false))) ){
-					next = TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[22]), false);
-				}
-			}
+					if(next == null || (!((HashMap<String, Object>)inter).get(InterventionModel.listFields[22]).equals(false) &&
+					   next.after(TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[22]), false))) ){
+						next = TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[22]), false);
+					}		
 		}
 		
 		return new Timestamp[] {last, next};

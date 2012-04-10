@@ -140,10 +140,20 @@ public class ActivityInterTabInfo extends Activity implements OnClickListener{
     	
         if(intervention.getType().equals("incident")){
     		tvDateLabel.setText(context.getText(R.string.callDateLabel));
-    		tvDate.setText(intervention.getCallDay().toLocaleString());
+    		if(intervention.getCallDay() != null)
+    			tvDate.setText(intervention.getCallDay().toLocaleString());
+    		else
+    			tvDate.setText(R.string.NA);
     		
-    		tvLast.setText(machine.getLastInter().toLocaleString());
-    		tvNext.setText(machine.getNextInter().toLocaleString());
+    		if(machine.getLastInter()!=null)
+    			tvLast.setText(machine.getLastInter().toLocaleString());
+    		else
+    			tvLast.setText(R.string.NA);
+    		
+    		if(machine.getNextInter()!=null)
+    			tvNext.setText(machine.getNextInter().toLocaleString());
+    		else
+    			tvNext.setText(R.string.NA);
     	}
     	else{
     		tvDateLabel.setText(context.getText(R.string.deadlineDate));

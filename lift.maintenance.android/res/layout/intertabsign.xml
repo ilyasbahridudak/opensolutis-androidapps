@@ -7,37 +7,22 @@
         android:orientation="vertical"
         android:padding="5dp" >
         
-        <ScrollView
-		    android:id="@+id/scrollView1"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content" >
-
-		    <LinearLayout
-		        android:id="@+id/linearLayout1"
-		        android:layout_width="match_parent"
-		        android:layout_height="match_parent"
-		        android:orientation="vertical" >
-		
-		        <EditText
-		            android:id="@+id/etSignName"
-		            android:layout_width="match_parent"
-		            android:layout_height="wrap_content" >
-		
-		            <requestFocus />
-		        </EditText>
+        <EditText android:id="@+id/etSignName"
+		          android:layout_width="match_parent"
+		          android:layout_height="wrap_content" >
+			<requestFocus />
+		</EditText>
 		        
-				<com.android.drawing.ImageDrawer
-				    android:id="@+id/iVSign"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:layout_marginBottom="5dp"
-				    android:scaleType="matrix" />
+		<com.android.drawing.ImageDrawer
+		    android:id="@+id/iVSign"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="5dp"
+			android:scaleType="matrix" />
 		
-				<Button
-				    android:id="@+id/bValSig"
-				    android:layout_width="match_parent"
-				    android:layout_height="wrap_content"
-				    android:text="@string/bValSig" />
-			</LinearLayout>
-		</ScrollView>
+		<Button android:id="@+id/bValSig"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/bValSig" />
+
     </LinearLayout>

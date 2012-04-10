@@ -159,8 +159,13 @@ public class ActivityMain extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	if(item.getItemId()==R.id.itSettings){
-    		Intent intent = new Intent(ActivityMain.this, ActivitySettings.class);
-			startActivity(intent);
+    		if(prefs.getBoolean("can_sync", true)){
+    			Intent intent = new Intent(ActivityMain.this, ActivitySettings.class);
+    			startActivity(intent);
+    		}
+    		else {
+    			ServiceSync.showMessage(getApplicationContext(), (String) getText(R.string.cantEditSetting));
+    		}
     	} else if(item.getItemId()==R.id.itSync){
     		if(prefs.getBoolean("can_sync", true)){
     			mProgressDialog  = ProgressDialog.show(ActivityMain.this, getString(R.string.synchroWaitTitle), getString(R.string.synchroManWaitMessage), true);
