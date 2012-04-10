@@ -6,14 +6,15 @@ import lift.maintenance.android.service.ServiceSync;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.InflateException;
@@ -34,36 +35,24 @@ public class ActivityMain extends Activity {
 	private Button bCheckList;
 	private Button bMaintenances;
 	private Button bIncidents;
-		
-	private class SyncBackground extends AsyncTask<Object, Object, Object>{
-
-		@Override
-		protected Object doInBackground(Object... params) {
-			if(prefs.getBoolean("can_sync", true)){
-				SharedPreferences.Editor editor=prefs.edit();
-				editor.putBoolean("can_sync", false);
-				editor.commit();
-				
-				if(ServiceSync.isStarted(context))
-	    			stopService(new Intent(ActivityMain.this, ServiceSync.class));
-	            
-				ServiceSync.showMessage(getApplicationContext(), (String) getText(R.string.BeginSync));
-				ServiceSync.showMessage(getApplicationContext(), Synchro.synchro(prefs, context, manager));
-				refreshButtons();
-	    		
-	    		if(!ServiceSync.isStarted(context))
-	    			startService(new Intent(ActivityMain.this, ServiceSync.class));
-	    		
+	private ProgressDialog mProgressDialog;
+	final Handler mHandler = new Handler() {
+	    public void handleMessage(Message msg) {
+	    	switch (msg.what) {
+	    	case 1:
+	    		ServiceSync.showMessage(getApplicationContext(), (String) getText(R.string.BeginSync));
+	    		break;
+	    	case 2:
+	    		SharedPreferences.Editor editor=prefs.edit();
 	    		editor.putBoolean("can_sync", true);
 	    		editor.commit();
-			}
-			else
-				ServiceSync.showMessage(getApplicationContext(), (String) getText(R.string.allready_sync));
-			return null;
-		}
+	    		refreshButtons();
+	    		mProgressDialog.dismiss();
+	    		break;
+	    	}
+	    }
+	};	
 		
-	}
-	
 	//événement de création de la vue
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -173,8 +162,31 @@ public class ActivityMain extends Activity {
     		Intent intent = new Intent(ActivityMain.this, ActivitySettings.class);
 			startActivity(intent);
     	} else if(item.getItemId()==R.id.itSync){
-    		//runSync.start();
-    		new SyncBackground().execute((Object[])null);
+    		if(prefs.getBoolean("can_sync", true)){
+    			mProgressDialog  = ProgressDialog.show(ActivityMain.this, getString(R.string.synchroWaitTitle), getString(R.string.synchroManWaitMessage), true);
+    			
+    			if(ServiceSync.isStarted(context))
+	    			stopService(new Intent(ActivityMain.this, ServiceSync.class));
+    			
+    			SharedPreferences.Editor editor=prefs.edit();
+				editor.putBoolean("can_sync", false);
+				editor.commit();
+				
+				new Thread((new Runnable() {
+			        public void run() {
+			        	mHandler.sendEmptyMessage(1);
+			        	
+			        	String message = Synchro.synchro(prefs, context, manager);
+
+			            mHandler.sendEmptyMessage(2);
+			            
+			            startService(new Intent(ActivityMain.this, ServiceSync.class));
+			            ServiceSync.showMessage(getApplicationContext(), message);
+			        }
+				})).start();
+    		}
+    		else
+				ServiceSync.showMessage(getApplicationContext(), (String) getText(R.string.allready_sync));
     	}
     	return (super.onOptionsItemSelected(item));
     }

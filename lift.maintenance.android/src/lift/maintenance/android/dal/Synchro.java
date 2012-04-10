@@ -51,7 +51,7 @@ public class Synchro {
 				editor.putLong("last", today.getTime());
 				editor.commit();
 			}
-			modifs = synchroInterventions(access, manager, context, modifs);
+			modifs = synchroInterventions(access, manager, context, modifs, true);
 		}
 		
 		String message = context.getString(R.string.SyncOf);
@@ -65,6 +65,43 @@ public class Synchro {
 		}
 		else
 			return(context.getString(R.string.enddemo));
+	}
+	
+	public static void supressInterventions(SharedPreferences prefs, Context context, DataBaseManager manager){
+		xmlrpcAccess access = new xmlrpcAccess();
+		
+		int connected = access.Connect(prefs.getString("URL", ""), prefs.getString("base", ""), prefs.getString("login", ""), prefs.getString("pass", ""));
+		
+		if(connected == 0){
+			HashMap<Integer, Integer> modifs = new HashMap<Integer, Integer>();
+			for(int i = 1; i <= 15; i++)
+				modifs.put(i, 0);
+			
+			synchroInterventions(access, manager, context, modifs, false);
+			
+			manager.open();
+			List<Object> Ids  = (List<Object>) manager.intervention.getAllIds();
+			manager.close();
+			
+			for (Object id : Ids) {
+				manager.open();
+				manager.intervention.remove((Integer)id);
+				manager.close();
+			}
+		}
+	}
+	
+	public static void synchroInterventions(SharedPreferences prefs, Context context, DataBaseManager manager) {
+		xmlrpcAccess access = new xmlrpcAccess();
+		
+		int connected = access.Connect(prefs.getString("URL", ""), prefs.getString("base", ""), prefs.getString("login", ""), prefs.getString("pass", ""));
+		
+		if(connected == 0){
+			HashMap<Integer, Integer> modifs = new HashMap<Integer, Integer>();
+			for(int i = 1; i <= 15; i++)
+				modifs.put(i, 0);
+			synchroInterventions(access, manager, context, modifs, true);
+		}
 	}
 	
 	private static HashMap<Integer, Integer> synchroCheckList(xmlrpcAccess access, DataBaseManager manager, HashMap<Integer, Integer> modifs){
@@ -507,42 +544,7 @@ public class Synchro {
 		return modifs;
 	}
 	
-	private static Timestamp[] getMaintenances(int machine_id, xmlrpcAccess access) {
-		Timestamp last=null;
-		Timestamp next=null;
-		Object query = new  ArrayList<Object>();
-		((ArrayList<Object>)query).add(CreateTuple("machine_id","=",machine_id));
-		((ArrayList<Object>)query).add(CreateTuple("state","=","done"));
-		((ArrayList<Object>)query).add(CreateTuple("type","=","maintenance"));
-		
-		Object last_ids = access.Search(InterventionModel.modelName, query);
-		if(!last_ids.getClass().equals(String.class)){
-			Object last_objs = access.Read(InterventionModel.modelName, last_ids, InterventionModel.listFields);
-			if(!last_objs.getClass().equals(String.class)){
-				for(Object inter : (Object[])last_objs){
-					if(last == null || last.before(TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[9]),false)))
-						last = TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[9]),false);
-				}
-			}
-		}
-		
-		((ArrayList<Object>)query).set(1, CreateTuple("state","!=","done"));
-		
-		Object next_ids = access.Search(InterventionModel.modelName, query);
-		if(!next_ids.getClass().equals(String.class)){
-			Object next_objs = access.Read(InterventionModel.modelName, next_ids, InterventionModel.listFields);
-			if(!next_objs.getClass().equals(String.class)){
-				for(Object inter : (Object[])next_objs)
-				if(next == null || next.after(TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[22]), false))){
-					next = TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[22]), false);
-				}
-			}
-		}
-		
-		return new Timestamp[] {last, next};
-	}
-
-	private static HashMap<Integer, Integer> synchroInterventions(xmlrpcAccess access, DataBaseManager manager,	Context context, HashMap<Integer, Integer> modifs) {
+	private static HashMap<Integer, Integer> synchroInterventions(xmlrpcAccess access, DataBaseManager manager,	Context context, HashMap<Integer, Integer> modifs, Boolean doNew) {
 		List<Object> machine_ids = new ArrayList<Object>();
 		Object query;
 		Object empId = 0;
@@ -714,91 +716,93 @@ public class Synchro {
 					}
 				}
 				
-				//insertion des interventions n'exitant pas dans Android
-				Object Ids2Insert = DiffLists((List<Object>)ERPIds, (List<Object>)AndroidIds);
-				
-				if(!((List<Object>)Ids2Insert).isEmpty()){
-					Object ERPInsert = access.Read(InterventionModel.modelName, ((List<Object>)Ids2Insert), InterventionModel.listFields);
+				if(doNew){
+					//insertion des interventions n'exitant pas dans Android
+					Object Ids2Insert = DiffLists((List<Object>)ERPIds, (List<Object>)AndroidIds);
 					
-					//vérification du resultat de la lecture
-					if(!ERPInsert.getClass().equals(String.class)){
-						for(Object valueObj : (Object[])ERPInsert){
-							HashMap<Object, Object> value = (HashMap<Object, Object>)valueObj;
-							
-							InterventionModel inter = new InterventionModel();
-							
-							inter.setBaseId((Integer) value.get(InterventionModel.listFields[0]));
-							inter.setName((String) value.get(InterventionModel.listFields[2]));
-							
-							if(!value.get(InterventionModel.listFields[3]).equals(false))
-								inter.setChapterId((Integer)((Object[])value.get(InterventionModel.listFields[3]))[0]);
-							
-							if(!value.get(InterventionModel.listFields[4]).equals(false))
-								inter.setLocalizationId((Integer)((Object[])value.get(InterventionModel.listFields[4]))[0]);
-							
-							if(!value.get(InterventionModel.listFields[5]).equals(false))
-								inter.setCauseId((Integer)((Object[])value.get(InterventionModel.listFields[5]))[0]);
-							
-							if(!value.get(InterventionModel.listFields[6]).equals(false))
-								inter.setInformation((String) value.get(InterventionModel.listFields[6]));
-							
-							if(!value.get(InterventionModel.listFields[7]).equals(false))
-								inter.setCallDay(TableModel.stringToDate((String)value.get(InterventionModel.listFields[7]), false));
-							
-							if(!value.get(InterventionModel.listFields[8]).equals(false))
-								inter.setInterventionStart(TableModel.stringToDate((String)value.get(InterventionModel.listFields[8]), false));
-							
-							if(!value.get(InterventionModel.listFields[9]).equals(false))
-								inter.setInterventionEnd(TableModel.stringToDate((String)value.get(InterventionModel.listFields[9]), false));
-							
-							if(!value.get(InterventionModel.listFields[10]).equals(false))
-								inter.setRequestorName((String) value.get(InterventionModel.listFields[10]));
-							
-							if(!value.get(InterventionModel.listFields[11]).equals(false))
-								inter.setRequestorPhone((String) value.get(InterventionModel.listFields[11]));
-							
-							inter.setState((String) value.get(InterventionModel.listFields[12]));
-							
-							if(!value.get(InterventionModel.listFields[13]).equals(false))
-								inter.setType((String) value.get(InterventionModel.listFields[13]));
-							else
-								inter.setType("incident");
-							
-							inter.setSomeone((Boolean) value.get(InterventionModel.listFields[14]));
-							
-							if(!value.get(InterventionModel.listFields[15]).equals(false))
-								inter.setSignatureName((String) value.get(InterventionModel.listFields[15]));
-							
-							if(!value.get(InterventionModel.listFields[16]).equals(false))
-								inter.setSignaturePicture(Base64.decode(value.get(InterventionModel.listFields[16]).toString(), Base64.DEFAULT));
-							
-							inter.setInvoiceable((Boolean) value.get(InterventionModel.listFields[17]));
-							inter.setMachineId((Integer) ((Object[])value.get(InterventionModel.listFields[18]))[0]);
-							inter.setMachineName((String) ((Object[])value.get(InterventionModel.listFields[18]))[1]);
-							inter.setParachute((Boolean) value.get(InterventionModel.listFields[20]));
-							inter.setCable((Boolean) value.get(InterventionModel.listFields[21]));
-							
-							if(!value.get(InterventionModel.listFields[22]).equals(false))
-								inter.setMaintenanceDeadline(TableModel.stringToDate((String)value.get(InterventionModel.listFields[22]), false));
-							
-							if(!value.get(InterventionModel.listFields[23]).equals(false))
-								inter.setTakeIntoAccountDay(TableModel.stringToDate((String)value.get(InterventionModel.listFields[23]), false));
-							
-							if(!value.get(InterventionModel.listFields[24]).equals(false))
-								inter.setLastIncidents((String) value.get(InterventionModel.listFields[24]));
-
-							manager.open();
-							manager.intervention.insert(inter);
-							manager.close();
-							if(!machine_ids.contains(inter.getMachineId()))
-								machine_ids.add(inter.getMachineId());
-							modifs.put(14, modifs.get(14)+1);
-							
+					if(!((List<Object>)Ids2Insert).isEmpty()){
+						Object ERPInsert = access.Read(InterventionModel.modelName, ((List<Object>)Ids2Insert), InterventionModel.listFields);
+						
+						//vérification du resultat de la lecture
+						if(!ERPInsert.getClass().equals(String.class)){
+							for(Object valueObj : (Object[])ERPInsert){
+								HashMap<Object, Object> value = (HashMap<Object, Object>)valueObj;
+								
+								InterventionModel inter = new InterventionModel();
+								
+								inter.setBaseId((Integer) value.get(InterventionModel.listFields[0]));
+								inter.setName((String) value.get(InterventionModel.listFields[2]));
+								
+								if(!value.get(InterventionModel.listFields[3]).equals(false))
+									inter.setChapterId((Integer)((Object[])value.get(InterventionModel.listFields[3]))[0]);
+								
+								if(!value.get(InterventionModel.listFields[4]).equals(false))
+									inter.setLocalizationId((Integer)((Object[])value.get(InterventionModel.listFields[4]))[0]);
+								
+								if(!value.get(InterventionModel.listFields[5]).equals(false))
+									inter.setCauseId((Integer)((Object[])value.get(InterventionModel.listFields[5]))[0]);
+								
+								if(!value.get(InterventionModel.listFields[6]).equals(false))
+									inter.setInformation((String) value.get(InterventionModel.listFields[6]));
+								
+								if(!value.get(InterventionModel.listFields[7]).equals(false))
+									inter.setCallDay(TableModel.stringToDate((String)value.get(InterventionModel.listFields[7]), false));
+								
+								if(!value.get(InterventionModel.listFields[8]).equals(false))
+									inter.setInterventionStart(TableModel.stringToDate((String)value.get(InterventionModel.listFields[8]), false));
+								
+								if(!value.get(InterventionModel.listFields[9]).equals(false))
+									inter.setInterventionEnd(TableModel.stringToDate((String)value.get(InterventionModel.listFields[9]), false));
+								
+								if(!value.get(InterventionModel.listFields[10]).equals(false))
+									inter.setRequestorName((String) value.get(InterventionModel.listFields[10]));
+								
+								if(!value.get(InterventionModel.listFields[11]).equals(false))
+									inter.setRequestorPhone((String) value.get(InterventionModel.listFields[11]));
+								
+								inter.setState((String) value.get(InterventionModel.listFields[12]));
+								
+								if(!value.get(InterventionModel.listFields[13]).equals(false))
+									inter.setType((String) value.get(InterventionModel.listFields[13]));
+								else
+									inter.setType("incident");
+								
+								inter.setSomeone((Boolean) value.get(InterventionModel.listFields[14]));
+								
+								if(!value.get(InterventionModel.listFields[15]).equals(false))
+									inter.setSignatureName((String) value.get(InterventionModel.listFields[15]));
+								
+								if(!value.get(InterventionModel.listFields[16]).equals(false))
+									inter.setSignaturePicture(Base64.decode(value.get(InterventionModel.listFields[16]).toString(), Base64.DEFAULT));
+								
+								inter.setInvoiceable((Boolean) value.get(InterventionModel.listFields[17]));
+								inter.setMachineId((Integer) ((Object[])value.get(InterventionModel.listFields[18]))[0]);
+								inter.setMachineName((String) ((Object[])value.get(InterventionModel.listFields[18]))[1]);
+								inter.setParachute((Boolean) value.get(InterventionModel.listFields[20]));
+								inter.setCable((Boolean) value.get(InterventionModel.listFields[21]));
+								
+								if(!value.get(InterventionModel.listFields[22]).equals(false))
+									inter.setMaintenanceDeadline(TableModel.stringToDate((String)value.get(InterventionModel.listFields[22]), false));
+								
+								if(!value.get(InterventionModel.listFields[23]).equals(false))
+									inter.setTakeIntoAccountDay(TableModel.stringToDate((String)value.get(InterventionModel.listFields[23]), false));
+								
+								if(!value.get(InterventionModel.listFields[24]).equals(false))
+									inter.setLastIncidents((String) value.get(InterventionModel.listFields[24]));
+	
+								manager.open();
+								manager.intervention.insert(inter);
+								manager.close();
+								if(!machine_ids.contains(inter.getMachineId()))
+									machine_ids.add(inter.getMachineId());
+								modifs.put(14, modifs.get(14)+1);
+								
+							}
 						}
 					}
+					
+					modifs = synchroMachine(access, manager, context, machine_ids, modifs);
 				}
-				
-				modifs = synchroMachine(access, manager, context, machine_ids, modifs);
 			}
 		}
 		return modifs;
@@ -832,5 +836,42 @@ public class Synchro {
 		}
 		
 		return res;
+	}
+
+	private static Timestamp[] getMaintenances(int machine_id, xmlrpcAccess access) {
+		Timestamp last=null;
+		Timestamp next=null;
+		Object query = new  ArrayList<Object>();
+		((ArrayList<Object>)query).add(CreateTuple("machine_id","=",machine_id));
+		((ArrayList<Object>)query).add(CreateTuple("state","=","done"));
+		((ArrayList<Object>)query).add(CreateTuple("type","=","maintenance"));
+		
+		Object last_ids = access.Search(InterventionModel.modelName, query);
+		if(!last_ids.getClass().equals(String.class)){
+			Object last_objs = access.Read(InterventionModel.modelName, last_ids, InterventionModel.listFields);
+			if(!last_objs.getClass().equals(String.class)){
+				for(Object inter : (Object[])last_objs){
+					if(last == null || (!((HashMap<String, Object>)inter).get(InterventionModel.listFields[9]).equals(false) &&
+										last.before(TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[9]),false))) )
+						last = TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[9]),false);
+				}
+			}
+		}
+		
+		((ArrayList<Object>)query).set(1, CreateTuple("state","!=","done"));
+		
+		Object next_ids = access.Search(InterventionModel.modelName, query);
+		if(!next_ids.getClass().equals(String.class)){
+			Object next_objs = access.Read(InterventionModel.modelName, next_ids, InterventionModel.listFields);
+			if(!next_objs.getClass().equals(String.class)){
+				for(Object inter : (Object[])next_objs)
+				if(next == null || (!((HashMap<String, Object>)inter).get(InterventionModel.listFields[22]).equals(false) &&
+								    next.after(TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[22]), false))) ){
+					next = TableModel.stringToDate((String) ((HashMap<String, Object>)inter).get(InterventionModel.listFields[22]), false);
+				}
+			}
+		}
+		
+		return new Timestamp[] {last, next};
 	}
 }

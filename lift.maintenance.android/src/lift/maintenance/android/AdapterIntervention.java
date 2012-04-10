@@ -68,7 +68,8 @@ public class AdapterIntervention extends BaseAdapter {
 		holder.tvDescription.setText(lst.get(position).getInformation());
 		holder.tvAddress.setText(lst.get(position).getMachineName());
 		if(lst.get(position).getType().equals("incident"))
-			holder.tvDate.setText(lst.get(position).getCallDay().toLocaleString());
+			if(lst.get(position).getCallDay() != null)
+				holder.tvDate.setText(lst.get(position).getCallDay().toLocaleString());
 		else if(lst.get(position).getMaintenanceDeadline()!=null)
 			holder.tvDate.setText(lst.get(position).getMaintenanceDeadline().toLocaleString());
 		
