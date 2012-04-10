@@ -77,4 +77,12 @@
     <string name="labLast">Last Maintenance</string>
     <string name="labNext">Next Maintenance</string>
     <string name="enddemo">End Sync</string>
+    <string name="newUserTitle">New User</string>
+    <string name="newUserMessage">Do you want to delete old user\'s interventions ?</string>
+    <string name="synchroWaitTitle">Please Wait</string>
+    <string name="synchroNewWaitMessage">Delete old and synchronise new interventions, it will takes several minutes.</string>
+    <string name="synchroManWaitMessage">Synchronise informations, it will takes several minutes.</string>
+    <string name="Yes">Yes</string>
+    <string name="Cancel">Cancel</string>
+    <string name="No">No</string>
 </resources>

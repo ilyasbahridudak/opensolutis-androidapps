@@ -112,7 +112,11 @@ public class ActivityInterTabIncident extends Activity implements OnClickListene
 	public void onClick(View v) {
 		switch(v.getId()){
 		case R.id.bCall:
-			Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+Intervention.getRequestorPhone()));
+			Intent intent;
+			if(Intervention.getRequestorPhone() != null)
+				intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+Intervention.getRequestorPhone()));
+			else
+				intent = new Intent(Intent.ACTION_DIAL);
 			startActivity(intent);
 			break;
 		}

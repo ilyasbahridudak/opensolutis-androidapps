@@ -4,13 +4,20 @@ import com.xmlrpc.access.xmlrpcAccess;
 
 import java.lang.Integer;
 
+import lift.maintenance.android.dal.DataBaseManager;
+import lift.maintenance.android.dal.Synchro;
 import lift.maintenance.android.service.ServiceSync;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +34,8 @@ public class ActivitySettings extends Activity {
 	private Context context;
 	private SharedPreferences prefs;
 	private xmlrpcAccess access;
+	
+	private ProgressDialog mProgressDialog;
 	
 	//événement de création de la vue
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,9 +67,54 @@ public class ActivitySettings extends Activity {
         bValider = (Button) findViewById(R.id.bValidSettings);
         bValider.setOnClickListener(new View.OnClickListener() {
         	public void onClick(View v){
-        		Save();
-        		if(Connect())
-    				finish();
+        		if(Connect()){
+        			if(ServiceSync.isStarted(context)){
+        	        	stopService(new Intent(ActivitySettings.this, ServiceSync.class));
+        	        }
+        			
+        			if(prefs.getString("login", "") == "" || prefs.getString("login", "").equals(etLogin.getText().toString())){
+        				Save();
+        				finish();
+        			}
+        			else{
+        				AlertDialog.Builder builder = new AlertDialog.Builder(ActivitySettings.this);
+        				builder.setMessage(R.string.newUserMessage).setTitle(R.string.newUserTitle)
+        				.setPositiveButton(getString(R.string.Yes), new DialogInterface.OnClickListener()
+        				{
+        					public void onClick(DialogInterface dialog, int id)
+        					{
+        						mProgressDialog  = ProgressDialog.show(ActivitySettings.this, getString(R.string.synchroWaitTitle), getString(R.string.synchroNewWaitMessage), true);
+        						
+        						new Thread((new Runnable() {
+        					        public void run() {
+        					        	Synchro.supressInterventions(prefs, context,  new DataBaseManager(context));
+        					            
+        					            mHandler.sendEmptyMessage(1);
+        					            
+        					            Synchro.synchroInterventions(prefs, context, new DataBaseManager(context));
+        					            
+        					            mHandler.sendEmptyMessage(2);
+        					            
+        					            startService(new Intent(ActivitySettings.this, ServiceSync.class));
+        					            finish();
+        					        }
+        						})).start();
+        					}
+        				})
+        				.setNegativeButton(getString(R.string.No), new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								Save();
+								startService(new Intent(ActivitySettings.this, ServiceSync.class));
+								finish();
+							}
+						})
+						.setNeutralButton(getString(R.string.Cancel), new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								startService(new Intent(ActivitySettings.this, ServiceSync.class));
+							}})
+						.create().show();
+        			}
+        		}
         	}
         });
         
@@ -88,17 +142,13 @@ public class ActivitySettings extends Activity {
 		else
 			editor.putInt("freq", 0);
 		editor.commit();
-		if(ServiceSync.isStarted(context)){
-        	stopService(new Intent(ActivitySettings.this, ServiceSync.class));
-        }
-		startService(new Intent(ActivitySettings.this, ServiceSync.class));
 	}
 	
 	//tests de connection
 	private Boolean Connect(){
 		//tentative de connection
-		int rep = access.Connect(prefs.getString("URL", ""), prefs.getString("base", ""),
-				prefs.getString("login", ""), prefs.getString("pass", ""));
+		int rep = access.Connect(etURL.getText().toString(), etBase.getText().toString(),
+				etLogin.getText().toString(), etPass.getText().toString());
 		//gestion de la réponse
 		switch(rep){
 			case 0:
@@ -117,4 +167,15 @@ public class ActivitySettings extends Activity {
 		}
 	}
 	
+	final Handler mHandler = new Handler() {
+	    public void handleMessage(Message msg) {
+	    	switch (msg.what) {
+	    	case 1:
+	    		Save();
+	    		break;
+	    	case 2:
+	    		mProgressDialog.dismiss();
+	    	}
+	    }
+	};
 }

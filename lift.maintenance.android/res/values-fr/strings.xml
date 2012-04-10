@@ -76,4 +76,12 @@
     <string name="labLast">Dérniére Visite</string>
     <string name="labNext">Prochaine Visite</string>
     <string name="enddemo">Synchro términée</string>
+    <string name="newUserTitle">New User</string>
+    <string name="newUserMessage">Voulez-vous supprimer les interventions de l\'ancien utilisateur ?</string>
+    <string name="synchroWaitTitle">Patientez</string>
+    <string name="synchroNewWaitMessage">Supprime les anciennes et synchronise les nouvelles interventions, cela peut prendre quelques minutes.</string>
+    <string name="synchroManWaitMessage">Synchronise les informations, cela peut prendre quelques minutes.</string>
+    <string name="Yes">Oui</string>
+    <string name="Cancel">Annuler</string>
+    <string name="No">Non</string>
 </resources>
