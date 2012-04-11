@@ -99,7 +99,10 @@ public class ActivitySettings extends Activity {
         					            startService(new Intent(ActivitySettings.this, ServiceSync.class));
         					            finish();
         					        }
+        					        
         						})).start();
+        						
+        						
         					}
         				})
         				.setNegativeButton(getString(R.string.No), new DialogInterface.OnClickListener() {
