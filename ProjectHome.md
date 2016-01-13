@@ -1,0 +1,1 @@
+Application Android interfacée avec OpenERP pour la gestion de la maintenance des ascenseurs.
